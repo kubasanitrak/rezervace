@@ -1,0 +1,40 @@
+/*
+.logo-container {
+	width: calc((#{$fz-H1} * var(--logo-ENLARGE)) * var(--logo-RATIO));
+	display: flex;
+	justify-content: flex-end;
+	position: absolute;
+	right: var(--pad-R);
+	top: calc(var(--pad-T) * 1.1);
+	@include mq(mq-land) {
+		top: var(--pad-T);
+	}
+	@include mq(mq-land-L-UP) {
+		right: 0;
+	}
+	@include mq(mq-land-L-UP) {
+		--logo-ENLARGE: 1.085;
+	}
+}
+
+
+.logo {
+	width: 100%;
+}
+*/
+
+.logo-parent {
+	overflow: hidden;
+	position: relative;
+	overflow: hidden;
+	display: flex;
+	flex-direction: column;
+	justify-content: flex-end;
+	transition: height #{$dur}s 1s ease-in-out;
+	transform-origin: top center;
+
+	@include mq(mq-BREAK-P) {
+		--logo-H: 120px;
+	}
+
+}

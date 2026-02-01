@@ -1,0 +1,18 @@
+{
+    "name": "acf/grid-row",
+    "title": "Grid Row",
+    "description": "Custom Grid Row block.",
+    "category": "formatting",
+    "icon": "<svg xmlns='http://www.w3.org/2000/svg' data-name='Layer 1' viewBox='0 0 36 36'><path d='M0 0v24h36V0H0Zm34 22H2V2h32v20Z'/><path d='M9.95 20 22 7.95V6.54L8.54 20h1.41zM15.61 20 22 13.61v-1.42L14.19 20h1.42zM21.26 20l.74-.74v-1.41L19.85 20h1.41zM7.12 20 22 5.12V4h-.29l-16 16h1.41zM18.43 20 22 16.43v-1.41L17.02 20h1.41zM12.78 20 22 10.78V9.36L11.36 20h1.42zM10.39 4 4 10.39v1.42L11.81 4h-1.42zM13.22 4 4 13.22v1.42L14.64 4h-1.42zM7.57 4 4 7.57v1.41L8.98 4H7.57zM20.29 4h-1.41L4 18.88V20h.29l16-16zM4.74 4 4 4.74v1.41L6.15 4H4.74zM16.05 4 4 16.05v1.41L17.46 4h-1.41zM32 7.05 28.95 4h-1.41L32 8.46V7.05zM32 4.22 31.78 4h-1.42L32 5.64V4.22zM25.15 20 23 17.85v1.41l.74.74h1.41zM32 9.88 26.12 4h-1.41L32 11.29V9.88zM30.81 20 23 12.19v1.42L29.39 20h1.42zM27.98 20 23 15.02v1.41L26.57 20h1.41zM32 18.36l-9-9v1.42l9 9v-1.42zM32 12.71 23.29 4H23v1.12l9 9v-1.41zM32 15.54l-9-9v1.41l9 9v-1.41z'/></svg>",
+    "keywords": ["works grid row", "grid row"],
+    "acf": {
+        "mode": "preview",
+        "renderTemplate": "BLOCK-grid-row.php"
+    },
+    "supports": {
+        "anchor": true,
+        "jsx": true
+    },
+    "style": [ "file:../../assets/css/blocks.css" ],
+    "align": "full"
+}

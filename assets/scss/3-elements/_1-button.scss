@@ -1,0 +1,64 @@
+.wp-element-button,
+button {
+	box-shadow: none;
+	border-radius: 0;
+	cursor: pointer;
+	border: none;
+	&:focus{
+		outline: 0;
+	}
+
+	display: inline-block;
+	padding: calc(#{$pad-T} * 0.3) calc(#{$pad-L} * 0.3);
+	background: none;
+	border: inherit;
+	border-radius: 0;
+	background-image: none;
+	color: inherit;
+	font-family: inherit;
+	font-size: inherit;
+	text-shadow: none;
+	cursor: pointer;
+}
+
+.wp-block-button.is-style-outline > .wp-block-button__link,
+.wp-block-button .wp-block-button__link.is-style-outline {
+	border-width: $line-THICK;
+	&:hover,
+	&:focus,
+	&:focus-within {
+		background-color: var(--LKBA-green);
+		border-color: var(--LKBA-green);
+		color: var(--color-bg);
+		transition:
+			color $global-transistion-duration ease-out,
+			border-color $global-transistion-duration ease-out,
+			background-color $global-transistion-duration ease-out;
+	}
+}
+
+.wp-block-button {
+	&,
+	> button {
+		width: 100%;
+		// min-width: 100%;
+		@include mq(mq-land) {
+			min-width: 8rem;
+			max-width: 10rem;
+		}
+	}
+}
+.wp-block-button__link {
+  border-radius: 0 !important;
+}
+.wp-block-button.is-style-outline--1 .wp-block-button__link {
+	background: transparent none;
+	border-color: currentColor;
+	border-width: $line-THICK;
+	border-style: solid;
+	color: currentColor;
+  // padding-top: 0.667em;
+  // padding-right: 1.33em;
+  // padding-bottom: 0.667em;
+  // padding-left: 1.33em;
+}

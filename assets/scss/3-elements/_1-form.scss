@@ -1,0 +1,73 @@
+form {
+	width: 100%;
+	// background-color: red;
+
+	&:not(.search-form):not(.signup-form) {
+
+		> div {
+			position: relative;
+
+			// Looks like placeholder
+			> label {
+				opacity: 0.3;
+				position: absolute;
+				top: 0.55em;
+				left: $pad-L;
+				@include transition(opacity);
+			}
+
+			> input[type="email"] {
+				
+			
+				&:focus {
+					background-color: #EEE;
+					& + label {
+						opacity: 0;
+					}
+				}
+			// show success!
+				&:valid {
+					// background: url(../images/check.svg);
+					background: red;
+					background-size: 20px;
+					background-repeat: no-repeat;
+					background-position: 20px 20px;
+
+					// continue to hide the label
+					& + label {
+						opacity: 0;
+					}
+				}
+			}
+		}
+
+		input[type="email"],
+		button {
+			width: 100%;
+			display: block;
+			padding: calc(#{$pad-T} * 0.3) calc(#{$pad-L} * 0.3);
+			line-height: 130%;
+			margin-bottom: $pad-T;
+			@include mq(mq-L-UP) {
+				display: inline-block;
+				// margin-bottom: 0;
+			}
+		}
+		input[type="email"] {
+			@include mq(mq-L-UP) {
+				width: 65%;
+				max-width: 20em;
+			}
+		}
+		button {
+			margin-left: 0;
+			@include mq(mq-L-UP) {
+				width: 30%;
+				// min-width: 6em;
+				max-width: 10em;
+				margin-bottom: 0;
+				margin-left: $pad-L;
+			}
+		}
+	}
+}

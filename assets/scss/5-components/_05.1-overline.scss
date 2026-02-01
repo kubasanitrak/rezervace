@@ -1,0 +1,72 @@
+.line-top {
+	position: relative;
+	&::before,
+	&::after {
+		content: "";
+		display: block;
+		position: absolute;
+		background-color: var(--color-highlight);
+		// left: var(--pad-R);
+			left: 0;
+
+		@include mq(mq-BREAK-P) {
+		}
+	}
+	&::before {
+		width: calc(100% - (var(--pad-R) * 2));
+		// width: calc(100% - (var(--pad-R) * 2));
+			width: 100%;
+
+		@include mq(mq-BREAK-P) {
+		}
+		height: $line-THICK;
+		top: calc((#{$dot-SIZE} - #{$line-THICK}) / 2);
+	}
+	&::after {
+		width: $dot-SIZE;
+		height: $dot-SIZE;
+		border-radius: 50%;
+		top: 0;
+	}
+	&--orange {
+		&::before,
+		&::after {
+			background-color: var(--corp-c-3);
+		}
+	}
+	&--white {
+		&::before,
+		&::after {
+			background-color: var(--white);
+		}
+	}
+	&--blue {
+		&::before,
+		&::after {
+			background-color: var(--corp-c-2);
+		}
+	}
+}
+
+.line-above {
+	position: relative;
+	&::before {
+		content: "";
+		display: block;
+		position: relative;
+		background-color: var(--color-highlight);
+		margin-bottom: calc(var(--pad-T) * 0.75);
+		width: calc(100% - (var(--pad-R) * 2));
+		// width: calc(100% - (var(--pad-R) * 2));
+
+		@include mq(mq-BREAK-P) {
+			width: 100%;
+		}
+		height: $line-THICK;
+		top: calc((#{$dot-SIZE} - #{$line-THICK}) / 2);
+		background-color: var(--white);
+	}
+	img {
+		padding-bottom: calc(var(--pad-T) * 0.75);
+	}
+}

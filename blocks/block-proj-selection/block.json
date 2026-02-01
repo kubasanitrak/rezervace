@@ -1,0 +1,13 @@
+{
+    "name": "acf/project-selection",
+    "title": "BLOCK-proj-selection",
+    "description": "Select Featured Projects.",
+    "category": "formatting",
+    "icon": "<svg viewBox='0 0 20 20' xmlns='http://www.w3.org/2000/svg'><path d='M4.502 12.347 9.947 14l5.445-1.608-5.417 6.633-5.473-6.678ZM10 15a7 7 0 1 0 0-14 7 7 0 0 0 0 14Zm0-2a5 5 0 1 0 0-10 5 5 0 0 0 0 10ZM13 8a3 3 0 1 1-6 0 3 3 0 0 1 6 0Z'/></svg>",
+    "keywords": ["project selection", "project list"],
+    "acf": {
+        "mode": "preview",
+        "renderTemplate": "BLOCK-proj-selection.php"
+    },
+    "align": "full"
+}

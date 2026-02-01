@@ -1,0 +1,16 @@
+{
+    "name": "acf/rozvrh-table",
+    "title": "Rozvrh table",
+    "description": "A custom table block.",
+    "category": "formatting",
+    "icon": "admin-comments",
+    "keywords": ["timetable", "rozvrh"],
+    "acf": {
+        "mode": "preview",
+        "renderTemplate": "BLOCK-rozvrh-table.php"
+    },
+    "supports": {
+        "anchor": true,
+        "jsx": true
+    }
+}

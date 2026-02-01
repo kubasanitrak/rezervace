@@ -1,0 +1,29 @@
+
+.header {
+	position: fixed;
+	top: 0;
+	left: 0;
+	width: 100%;
+}
+.hotspot {
+	position: absolute;
+	width: 100%;
+	left: 0;
+}
+.reveal-menu-on-hover {
+	display: none;
+	visibility: hidden;
+	cursor: pointer;
+	top: 0;
+	@include mq(mq-land-L-UP) {
+		height: 50px;
+		display: block;
+		visibility: visible;
+	}
+	@include mq(mq-L-UP) {
+		height: var(--headerH);
+	}
+	background-color: transparent;
+// background-color: hsla(120,100%,50%, 0.25);
+	// z-index: 100;
+}

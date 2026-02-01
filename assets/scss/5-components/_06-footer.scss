@@ -1,0 +1,22 @@
+.footer-cols {
+	display: flex;
+	.footer-col {
+		&_LABEL {
+			margin-right: calc(var(--gutter) * 2);
+		}
+		&_LINKS {
+			display: flex;
+			li {
+				&:not(:last-child) {
+					margin-right: var(--gutter);
+				}
+			}
+		}
+		&_LABEL,
+		&_LINKS li {
+			display: inline-flex;
+			flex-direction: column;
+			justify-content: center;
+		}
+	}
+}

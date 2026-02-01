@@ -1,0 +1,41 @@
+:root, [data-theme="default"] {
+	--white: #FFFFFF;
+	--black: #000000;
+
+	--LKBA-red-hsl:		355deg, 81%, 55%; // #E92F3D
+	--LKBA-red: hsl(var(--LKBA-red-hsl));
+	--LKBA-green-hsl:		163deg, 100%, 17%; // #00573F
+	--LKBA-green: hsl(var(--LKBA-green-hsl));
+	--LKBA-cream-hsl:		41deg, 43%, 89%; // #EEE7D6
+	--LKBA-cream: hsl(var(--LKBA-cream-hsl));
+	--LKBA-cream-dark-hsl:		43deg, 18%, 75%; // #CCC5B5
+	--LKBA-cream-dark: hsl(var(--LKBA-cream-dark-hsl));
+	--LKBA-dark-hsl:		60deg, 16%, 6%; // #12120D
+	--LKBA-dark: hsl(var(--LKBA-dark-hsl));
+
+	--gray1: var(--LKBA-dark);
+	--gray2: hsla(0, 0%, 48%, 1);
+	--gray3: hsla(0, 0%, 62%, 1);
+	--gray4: hsla(0, 0%, 72%, 1);
+
+	--color-primary: var(--black);
+
+	--corp-c-1: var(--LKBA-cream); // LKBA CREAM
+	--corp-c-2: var(--LKBA-green); // LKBA GREEN
+	--corp-c-3: var(--LKBA-red); // LKBA RED
+
+	/* color contrasts */
+	--color-bg: var(--LKBA-cream);
+	--menu-bg: var(--LKBA-cream);
+	--color-contrast-high: var(--LKBA-red);
+	--color-highlight: var(--LKBA-red);
+	--color-labels: var(--black);	
+	
+}
+$body-C: var(--color-primary);
+$body-BGR: var(--color-bg);
+$active-C: var(--color-highlight);
+
+$ham-BGR: var(--color-highlight);
+$ham-C: transparent;
+$ham-C: pink;

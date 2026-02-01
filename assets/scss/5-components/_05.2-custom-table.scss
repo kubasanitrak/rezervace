@@ -1,0 +1,100 @@
+.customtable {
+	margin-top: calc(var(--pad-T) * 3.0);
+	@include mq(mq-land) {
+		margin-top: var(--pad-T);
+	}
+	&-header,
+	&-row {
+		padding: .5em 0;
+		border-bottom: $line-THICK solid var(--LKBA-cream-dark);
+	}
+	&-row {
+		display: flex;
+		flex-direction: column;
+		@include mq(mq-land) {
+			flex-direction: row;
+			justify-content: space-between;
+		}
+	}
+	&-col {
+		position: relative;
+		margin-top: calc(var(--pad-T) * .25);
+		@include mq(mq-land) {
+			margin-top: 0;
+		}
+		&-row {
+			display: flex;
+		}
+		&_TIME {}
+		&_ITEM {}
+		&_COURSE {
+			@include mq(mq-land) {
+				flex-grow: 2;
+			}
+		}
+
+		&_COURSE,
+		&_INSTRUCTOR {
+			@include mq(mq-land) {
+				text-align: right;
+			}
+		}
+		&_INSTRUCTOR {
+			@include mq(mq-land) {
+				flex-basis: 10em;
+				// margin-left: var(--pad-R);
+			}
+			.customtable-col--item {
+				&:not(:first-child) {
+					margin-left: .25em;
+					&::before {
+						content: "/";
+						display: inline-block;
+						position: relative;
+						margin-right: .25em;
+					}
+				}
+			}
+		}
+		&_PRICE {
+			margin-right: .25em;
+		}
+		&_CURR {}
+		&_BOOK {
+			margin-top: 0;
+			position: absolute;
+			height: 100%;
+			top: 0;
+			right: 0;
+			@include mq(mq-land) {
+				// flex: 1;
+				position: relative;
+				top: initial;
+				right: initial;
+				flex-basis: 8em;
+				padding-left: var(--pad-R);
+			}
+			display: flex;
+			flex-direction: column;
+			justify-content: center;
+
+			.customtable-col--item_link {
+				display: block;
+				border: $line-THICK solid var(--LKBA-green);
+				padding: calc(#{$pad-T} * 0.3) calc(#{$pad-L} * 0.3);
+				font-size: calc(#{$fz-PLAIN} * .75);
+				text-transform: uppercase;
+				text-align: center;
+				@include mq(mq-land) {
+					padding: calc(#{$pad-T} * 0.15) calc(#{$pad-L} * 0.3);
+				}
+			}
+		}
+	}
+	&:not(:first-of-type),
+	&.bor-T {
+		border-top: $line-THICK solid var(--LKBA-cream-dark);
+	}
+}
+.customtable + .customtable {
+}

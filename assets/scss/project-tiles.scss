@@ -1,0 +1,140 @@
+@import '1-settings/_vars';
+@import '1-tools/_mixins';
+
+.select-list--row,
+.acf-innerblocks-container {
+	&::-webkit-scrollbar {
+		display:none;
+	}
+}
+html,
+.select-list--row,
+.acf-innerblocks-container {	
+		-ms-overflow-style: none;  /* IE and Edge */
+		scrollbar-width: none;  /* Firefox */
+}
+.select-list {
+
+	flex-direction: column;
+
+	--scroll-W: 150vw;
+	--scroll-W: 50%;
+	@include mq(mq-land) {
+		--scroll-W: 100%;		
+	}
+	.select-list--row {
+		@include mq(mq-land) {
+			padding: 0 var(--pad-R);
+		}
+	}
+	
+	&,
+	.select-list--row {
+		&,
+		.acf-innerblocks-container {
+			display: flex;
+			gap: var(--tile-gap);
+
+			flex: 1 0 100%;
+		}
+	}
+	.select-list--item {
+		position: relative;
+
+		.image-caption {
+			display: flex;
+			flex-direction: column;
+
+			@include mq(mq-land) {
+				flex-direction: row;
+				gap: var(--select-list-caption-gap);
+			}
+
+			p + p {
+				margin-top: 0;
+			}
+		}
+	}
+	.select-list--scroll_H {
+		&,
+		.acf-innerblocks-container {
+			scroll-snap-type: x mandatory;
+			overflow-x: auto;
+			white-space: nowrap;
+			position: relative;
+			width: 100%;
+			-webkit-overflow-scrolling: touch;  /* Important for iOS devices */
+			// padding-left: 0.5px;
+			scroll-margin: var(--gap);
+			scroll-margin-inline-start: var(--gap);
+
+			.select-list--item {
+				scroll-snap-align: start;
+				// scroll-snap-align: end;
+				// scroll-snap-align: center;
+	  			scroll-behavior: smooth;
+
+				flex: calc(var(--ratio)) 0 calc((var(--ratio) * var(--scroll-W)));
+
+				@include mq(mq-land) {
+
+					flex: calc(var(--ratio)) 0 0;
+				
+					.image-container {
+						aspect-ratio: var(--ratio);
+					}
+					img {
+						width: 100%;
+						height: auto;
+					}
+				}
+
+				.image-container {
+					aspect-ratio: var(--ratio);
+				}
+				img {
+					width: 100%;
+					height: auto;
+				}
+				&:first-child {
+					margin-left: var(--gap);
+					scroll-margin-inline-start: var(--gap);
+					@include mq(mq-land) {
+						margin-left: 0;
+					}
+				}
+				&:last-child {
+					margin-right: var(--gap);
+					@include mq(mq-land) {
+						margin-right: 0;
+					}
+				}
+			}
+		}
+	}
+	.select-list--row:not(.select-list--scroll_H) {
+		// padding: 0 var(--gap);
+		padding: 0 var(--pad-R);
+
+		@include mq(mq-land) {
+			padding: 0 var(--pad-R);
+		}
+
+
+		&,
+		.acf-innerblocks-container {
+		
+			.select-list--item {
+				min-width: 100%;
+				flex: 1 0 100%;
+				img {
+					width: 100%;
+					height: auto;
+					max-height: 100%;
+					min-width: 100%;
+					max-width: 100%;
+				}
+			}
+		}
+	}
+}

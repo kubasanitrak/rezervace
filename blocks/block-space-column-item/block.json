@@ -1,0 +1,16 @@
+{
+    "name": "acf/space-column-item",
+    "title": "Space Column Item",
+    "description": "Custom Column Item block.",
+    "category": "formatting",
+    "icon": "<svg xmlns='http://www.w3.org/2000/svg' data-name='Layer 1' viewBox='0 0 36 36'><path d='m5.58 2 2-2H6.16l-2 2h1.42zM.51 0 0 .51v1.41L1.92 0H.51zM2 2h.75l2-2H3.33L0 3.33v1.42l2-2V2zM8.41 2l2-2H8.99l-2 2h1.42zM2 6.99l-2 2v1.42l2-2V6.99zM2 12.65l-2 2v1.41l2-2v-1.41zM2 9.82l-2 2v1.41l2-2V9.82zM2 4.16l-2 2v1.42l2-2V4.16zM2 15.48l-2 2v1.41l2-2v-1.41zM11.23 2l2-2h-1.41l-2 2h1.41zM25.38 2l2-2h-1.42l-2 2h1.42zM19.72 2l2-2h-1.41l-2 2h1.41zM22.55 2l2-2h-1.42l-2 2h1.42zM28.2 2l2-2h-1.41l-2 2h1.41zM16.89 2l2-2h-1.41l-2 2h1.41zM14.06 2l2-2h-1.41l-2 2h1.41zM33.86 2l2-2h-1.41l-2 2h1.41zM31.03 2l2-2h-1.41l-2 2h1.41zM34 7.52l2-2V4.1l-2 2v1.42zM34 24h1l1-1v-1.41L33.59 24H34zM34 22h-1.41l-2 2H32l4-4v-1.41l-2 2V22zM29.59 22l-2 2H29l2-2h-1.41zM2 18.31l-2 2v1.41l2-2v-1.41zM34 16l2-2v-1.41l-2 2V16zM34 3.28v1.41l2-2V1.28l-2 2zM34 10.35l2-2V6.93l-2 2v1.42zM26.59 22l-2 2H26l2-2h-1.41zM34 13.18l2-2V9.76l-2 2v1.42zM34 19l2-2v-1.41l-2 2V19zM9.62 22l-2 2h1.41l2-2H9.62zM6.79 22l-2 2H6.2l2-2H6.79zM3.96 22l-2 2h1.42l2-2H3.96zM2 22v-.87l-2 2V24h.55l2-2H2zM12.45 22l-2 2h1.41l2-2h-1.41zM18.1 22l-2 2h1.42l2-2H18.1zM20.93 22l-2 2h1.42l2-2h-1.42zM23.76 22l-2 2h1.42l2-2h-1.42zM15.28 22l-2 2h1.41l2-2h-1.41zM32 18.36l-9-9v1.42l9 9v-1.42zM30.81 20 23 12.19v1.42L29.39 20h1.42zM23 19.26l.74.74h1.41L23 17.85v1.41zM27.98 20 23 15.02v1.41L26.57 20h1.41zM32 15.54l-9-9v1.41l9 9v-1.41zM32 12.71 23.29 4H23v1.12l9 9v-1.41zM32 4.22 31.78 4h-1.42L32 5.64V4.22zM32 9.88 26.12 4h-1.41L32 11.29V9.88zM32 7.05 28.95 4h-1.41L32 8.46V7.05zM4 20h17V4H4v16ZM6 6h13v12H6V6Z'/><path d='M13.93 12.78 11.5 9 7 16h11l-3-5-1.07 1.78z'/><circle cx='16.5' cy='8.5' r='1.5'/></svg>",
+    "keywords": ["works grid item", "grid item"],
+    "acf": {
+        "mode": "edit",
+        "renderTemplate": "BLOCK-space-column-item.php"
+    },
+    "supports": {
+        "anchor": true
+    },
+    "align": "full"
+}

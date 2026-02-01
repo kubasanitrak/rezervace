@@ -1,0 +1,156 @@
+Searching 163 files for "lkba_theme" (regex, case sensitive, whole word)
+
+~/Sites_MAMP/rezervace/wp-content/themes/lkba_theme/404.php:
+   10  <!-- PAGE CONTENT -->
+   11  <!-- h2.oops.error404 -->
+   12: 		<h2 class="oops error404"><?php _e( 'Ale to je nepříjemné.', 'lkba_theme' ); ?></h2>
+   13:         <p><?php _e( 'Pro tuto adresu není na těchto stránkách žádný obsah. Prosím zkuste některý z odkazů v hlavním menu.', 'lkba_theme' ); ?></p>
+   14  		
+   15  		</div>
+
+~/Sites_MAMP/rezervace/wp-content/themes/lkba_theme/_wp-snippets.php:
+  163  browser-sync start --proxy "http://localhost:8888/2replace/" --files "index.php"
+  164  
+  165: cd /Users/kuba/Sites_MAMP/2replace/wp-content/themes/lkba_theme/assets/css
+  166  
+  167  
+  ...
+  177                  .button button-primary
+  178  
+  179:             </p><a href="https://new.lkba_theme.cz/wp-login.php?action=lostpassword" title="Password Lost and Found">Zapomněli jste heslo?</a></div>
+  180  
+  181  
+  ...
+  184      <label class="eo-booking-label" ><span class="strong">Obchodní podmínky</span></label>
+  185      <div class="eo-booking-field-terms-conditions-text">Platbu za kurzy / kroužky je potřeba odeslat do 10 dnů od začátku dané aktivity.</div>
+  186:     <div class="eo-booking-field-terms-conditions-text">Podrobné znění podmínek <a class="terms-conditions-link" href="https://new.lkba_theme.cz/obchodni-podminky/">najdete zde</a>.</div>
+  187  </div>
+  188  
+  ...
+  194  
+  195  
+  196: <p class="plain">Podrobné znění podmínek <a class="terms-conditions-link" href="https://new.lkba_theme.cz/obchodni-podminky/">najdete zde</a>.</p>
+  197  
+  198  
+
+~/Sites_MAMP/rezervace/wp-content/themes/lkba_theme/footer.php:
+    4   *
+    5   * @package WordPress
+    6:  * @subpackage lkba_theme
+    7   * @since 1.0
+    8   * * @version 1.0
+    .
+   16  		<div class="padded-content footer-cols">
+   17  			<div class="footer-col footer-col_LABEL">
+   18: 				<h2 class="footer-col--headline"><?php _e('Sledujte nás', 'lkba_theme'); ?></h2>
+   19  			</div>
+   20  			
+
+~/Sites_MAMP/rezervace/wp-content/themes/lkba_theme/functions.php:
+    2  add_action( 'after_setup_theme', 'lkba_theme_setup' );
+    3  function lkba_theme_setup() {
+    4: load_theme_textdomain( 'lkba_theme', get_template_directory() . '/languages' );
+    5  add_theme_support( 'title-tag' );
+    6  add_theme_support( 'automatic-feed-links' );
+    .
+   11  
+   12  register_nav_menus( array(
+   13: 		'main-menu'    => __( 'Hlavni Menu', 'lkba_theme' ),
+   14: 		'fcbk-insta' => __( 'Social links', 'lkba_theme' ),
+   15: 		'lang-menu' => __( 'Languages', 'lkba_theme' ),
+   16: 		// 'selekce-menu'    => __( 'Selection Menu', 'lkba_theme' ),
+   17: 		// 'index-menu'    => __( 'Index Menu', 'lkba_theme' ),
+   18: 		// 'contact-menu'    => __( 'Contact Menu', 'lkba_theme' ),
+   19: 		// 'support' => __( 'Podpora', 'lkba_theme' ),
+   20  	) );
+   21  }
+   ..
+   68  			$shared_args,
+   69  			array (
+   70: 				'name' => __( 'Footer', 'lkba_theme' ),
+   71  				'id' => 'footer-widget-area',
+   72  				// 'before_widget' => '<li id="%1$s" class="widget-container %2$s">',
+   ..
+   82  			$shared_args,
+   83  			array (
+   84: 				'name' => __( 'Social links', 'lkba_theme' ),
+   85  				'id' => 'sociallinks-widget-area'
+   86  			)
+   ..
+  222      $newColorPalette = [
+  223          [
+  224:             'name'  => __( 'Krémová', 'lkba_theme' ),
+  225  			'slug'  => 'cream',
+  226  			'color'	=> '#EEE7D6',
+  227          ],
+  228          [
+  229:             'name'  => __( 'Rudá', 'lkba_theme' ),
+  230  			'slug'  => 'red',
+  231  			'color'	=> '#E92F3D',
+  232          ],
+  233          [
+  234:             'name'  => __( 'Zelená', 'lkba_theme' ),
+  235  			'slug'  => 'green',
+  236  			'color' => '#00573F',
+  237          ],
+  238          [
+  239:             'name'  => __( 'Dark', 'lkba_theme' ),
+  240  			'slug'  => 'black',
+  241  			'color' => '#000000',
+
+~/Sites_MAMP/rezervace/wp-content/themes/lkba_theme/page.php:
+    8   *
+    9   * @package WordPress
+   10:  * @subpackage lkba_theme
+   11   * @since 1.0
+   12   * * @version 1.0
+
+~/Sites_MAMP/rezervace/wp-content/themes/lkba_theme/search.php:
+    3  <div class="section" data-theme="default">
+    4              <div class="scroll-trigger line-top mar-B"></div>
+    5:             <h1 class="entry-title"><?php printf( __( 'Search Results for: %s', 'lkba_theme' ), get_search_query() ); ?></h1>
+    6  </div>
+    7  <div class="section" data-theme="default">
+    .
+   19  		<div class="article-item--footer">
+   20              <div class="wp-block-button is-style-outline">
+   21:                 <a class="wp-block-button__link" href="<?php the_permalink();?>"><?php _e('Read full article', 'lkba_theme'); ?></a>
+   22              </div>
+   23          </div>
+   ..
+   27      <div class="scroll-trigger line-top mar-B"></div>
+   28      <div class="flow mar-B">
+   29: 		<h2 class="entry-title"><?php _e( 'Nothing Found', 'lkba_theme' ); ?></h2>
+   30: 		<p><?php _e( 'Sorry, nothing matched your search. Please try again.', 'lkba_theme' ); ?></p>
+   31  	<!-- </div> -->
+   32  <?php endif; ?>
+
+~/Sites_MAMP/rezervace/wp-content/themes/lkba_theme/style.css:
+    8  Text Domain: nivb.cz
+    9  
+   10: lkba_theme WordPress Theme © 2019
+   11  */
+   12  /*
+
+~/Sites_MAMP/rezervace/wp-content/themes/lkba_theme/blocks/block-proj-selection/BLOCK-proj-selection.php:
+   83    <?php endwhile; ?>
+   84      </div> <!-- END POSTSGRID BLOCK -->
+   85: <?php else: __( 'Sorry, there are no posts to display', 'lkba_theme' ); ?>
+   86  <?php endif;  ?>
+   87  
+
+~/Sites_MAMP/rezervace/wp-content/themes/lkba_theme/template-parts/navigation-top.php:
+    4   *
+    5   * @package WordPress
+    6:  * @subpackage lkba_theme
+    7   * @since 1.0
+    8   * * @version 1.0
+
+~/Sites_MAMP/rezervace/wp-content/themes/lkba_theme/template-parts/social-links.php:
+    4   *
+    5   * @package WordPress
+    6:  * @subpackage lkba_theme
+    7   * @since 1.0
+    8   * * @version 1.0
+
+31 matches across 10 files

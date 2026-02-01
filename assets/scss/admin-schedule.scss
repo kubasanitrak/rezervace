@@ -1,0 +1,15 @@
+.barre-admin-controls {
+    margin: 1.5rem 0;
+    display: flex;
+    gap: 1rem;
+    flex-wrap: wrap;
+    align-items: center;
+}
+
+.barre-admin-calendar {
+    background: white;
+    padding: 1.5rem;
+    border: 1px solid #c3c4c7;
+    border-radius: 4px;
+    min-height: 500px;
+}

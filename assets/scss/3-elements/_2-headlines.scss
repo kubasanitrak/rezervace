@@ -1,0 +1,83 @@
+h1, .h1 {
+	font-size: $fz-H1;
+}
+h2, .h2,
+.main-nav-list,
+.nav-list,
+.wpm-language-switcher,
+.switcher-list,
+.wpml-ls {
+	font-size: $fz-H2;
+}
+h3, .h3 {
+	font-size: $fz-H3;
+}
+h4, .h4 {
+	font-size: $fz-H4;
+}
+h5, .h5 {
+	font-size: $fz-H5;
+}
+h6, .h6 {
+	font-size: $fz-H6;
+}
+h1,
+h2,
+h3,
+h4 {
+	font-weight: normal;
+}
+
+.main-nav-list,
+.nav-list,
+.menu-item,
+.wpml-ls {
+	line-height: 1em;
+	font-size: $fz-NAV;
+}
+
+h1,
+h2,
+h3,
+h4,
+h5,
+h6,
+.h1,
+.h2,
+.h3,
+.h4,
+.h5,
+.h6,
+.quantity input[type="number"] {
+	&:not(.child-tab-title):not(.article-item--caption_title):not(.article-item--caption_excerpt-title) {
+		// margin-bottom: 0.4em;
+	}
+	font-family: 'SuisseWorks-R';
+	font-style: normal;
+	font-weight: normal;
+}
+h1, .h1,
+h2, .h2,
+h3, .h3 {
+	letter-spacing: -0.015em;
+}
+.flow {
+	h2, .h2 {
+		max-width: 24em;
+	}
+}
+
+.mega {
+	font-size: $fz-MEGA;
+	font-family: 'InterB-var';
+	line-height: 1em;
+}
+.page-title {
+	margin-bottom: calc(var(--pad-T) * 1.0);
+}
+.vouchers-value,
+.vouchers-title {
+	// font-size: calc(#{$fz-MEGA} * .55);
+	font-size: calc(36px + (32 - 36) * ((100vw - 320px) / (2560 - 320)));
+	line-height: 1.25em;
+}

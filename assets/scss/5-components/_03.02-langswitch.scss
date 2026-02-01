@@ -1,0 +1,56 @@
+// ul
+.nav-list,
+.lang-menu {}
+// li
+.lang-item {
+	&-en {}
+}
+a [href*="/en/"],
+a[lang="en-GB"] {}
+
+.wpm-language-switcher,
+.switcher-list {
+	margin: 0;
+	border: none;
+	padding: 0;
+	line-height: 1em;
+	display: flex;
+	@include mq(mq-land-L-UP) {
+		position: absolute;
+		left: initial;
+		right: calc((25% - var(--pad-R)) / 2 );
+	}
+	color: var(--color-primary);
+	li {
+		&.active {
+			display: none;
+			visibility: hidden;
+		}
+		a,
+		span {
+			color: var(--color-primary);
+		}
+	}
+}
+/*
+li.lang-item {
+	&.lang-item-first {}
+	&.lang-item-cs {}
+	&.menu-item-type-custom {}
+	&.menu-item-object-custom {}
+	margin: 0;
+	border: none;
+	padding: 0;
+	line-height: 1em;
+	display: flex;
+	color: var(--color-primary);
+	@include mq(mq-land-L-UP) {
+		position: absolute;
+		left: initial;
+		// right: calc((25% - var(--pad-R)) / 2 );
+		right: calc((100% - var(--pad-R)) / 1.9 );
+		// right: calc( 50% - var(--pad-R) );
+	}
+	a {}
+}
+*/

@@ -1,0 +1,58 @@
+p, dl {
+	@include mq(mq-S) {}
+}
+
+em, i,
+.em, .italic {
+	font-family: 'InterI-var', Helvetica, Arial, sans-serif;
+	font-style: normal;
+}
+
+h1, h2, h3, h4, h5, h6, p, dt, dl, dd, sup, sub, ul, a {
+	-webkit-font-smoothing: antialiased; /* Chrome, Safari */
+	-moz-osx-font-smoothing: grayscale; /* Firefox */
+	    
+	-moz-font-feature-settings:    "kern" 1; 
+	-ms-font-feature-settings:     "kern" 1; 
+	-o-font-feature-settings:      "kern" 1; 
+	-webkit-font-feature-settings: "kern" 1; 
+	font-feature-settings:         "kern" 1;
+	// font-kerning: none;
+}
+.minor {
+	font-size: $fz-MINOR;
+}
+
+.section {
+	p {
+		// max-width: 34em;
+	}
+}
+
+.flow p,
+.plain {
+	font-size: $fz-PLAIN;
+	line-height: 1.25em;
+
+	p + p:not(.mar-T-0):not(.projdet-photo):not(.select-list--item_title) {
+		margin-top: 1.25em; // LINE HEIGHT
+	}
+}
+.flow {
+	h4, .h4 {
+		margin-top: 1em;
+	}
+	h4, .h4, strong, .strong, .bold {
+		font-weight: 700;
+		// font-family: 'InterB-var';
+	}
+	p, ul, ol {
+		max-width: 32em;
+		@include mq(mq-BREAK-P) {
+			// max-width: 22em;
+		}
+	}
+	ul {
+		padding-left: 1em;
+	}
+}

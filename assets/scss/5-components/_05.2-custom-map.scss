@@ -1,0 +1,27 @@
+// .iframe-container
+.map-container {
+	margin-top: calc(var(--pad-T) * 2.5);
+	margin-bottom: 0;
+	// margin-bottom: calc(var(--pad-T) * 1.5);
+	// margin-bottom: calc(var(--pad-T) * -1.5);
+	width: 100%;
+	max-width: 100%;
+	// margin-inline-start: 50%;
+	// transform: translate(-50%, 0);
+	@include mq(mq-BREAK-P) {
+		// transform: translate(0,0);
+		// margin-left: calc((100vw - #{$max-W} - (var(--pad-R) * 2)) * -0.36 + (var(--pad-R) * -1));
+	}
+// border: 1px solid;
+	.map-cont {
+		width: 100%;
+		height: 100%;
+		min-height: 75vh;
+		&, .gm-style {
+			background-color: var(--color-bg);
+		}
+		@include mq(mq-land) {
+			min-height: 80vh;
+		}
+	}
+}

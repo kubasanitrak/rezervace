@@ -1,0 +1,58 @@
+@import 'assets/css/blocks.css';
+:root {
+    --pad-T: calc(12px + (14 - 12) * ((100vw - 320px) / (2560 - 320)));
+    --pad-R: calc(12px + (15 - 12) * ((100vw - 320px) / (2560 - 320)));
+    --gap: var(--pad-R);
+    --gutter: var(--gap);
+
+    --info-col-num: 2;
+    --info-col-num-minus-1: 1;
+}
+    /* Main column width */
+.wp-block { max-width: 1440px; }
+.wp-block-acf-proj-info-col {
+    max-width: 50%;
+}
+/* Width of "wide" blocks */
+.wp-block[data-align="wide"] { max-width: 1440px; }
+
+/* Width of "full-width" blocks */
+.wp-block[data-align="full"] { max-width: none; }
+
+.project-info--columns {
+    display: flex;
+}
+
+h1, h2, h3, h4, h5, p {
+    font-family: 'Wallop-M', sans-serif;
+}
+
+.select-list,
+.row,
+.project-info--columns,
+.project-info--column,
+.space-columns--row,
+.space-columns--item,
+.padded-content,
+.custom-columns--row {
+    border: 2px dotted var(--gray1);
+}
+.custom-columns--row > .acf-innerblocks-container {
+    display: flex;
+    gap: var(--gutter);
+    width: 100%;
+    > div {
+      margin: 0;
+    }
+}
+
+.custom-columns--row >.acf-innerblocks-container {
+    justify-content: space-between;
+}
+.project-info--column {
+    flex-basis: 100%;
+}
+.credits-item--label {
+    text-transform: uppercase;
+    margin: 0;
+}

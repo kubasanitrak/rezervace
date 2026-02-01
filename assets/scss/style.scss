@@ -1,0 +1,209 @@
+@import '1-settings/_colors';
+@import '1-settings/_vars';
+@import '1-settings/_custom-ff';
+
+@import '1-tools/_mixins';
+
+@import '2-generic/_body';
+@import '2-generic/_box-model';
+@import '2-generic/_reset';
+@import '2-generic/_type';
+
+@import '3-elements/_0-a';
+@import '3-elements/_0-table';
+@import '3-elements/_0-ul';
+@import '3-elements/_1-button';
+@import '3-elements/_1-form';
+@import '3-elements/_2-headlines';
+@import '3-elements/_2-sub-sup';
+
+@import '4-objects/_classes';
+@import '4-objects/_lazyloading';
+@import '4-objects/_svg';
+@import '4-objects/_video-embed';
+
+
+@import '5-components/_00-z-indexes.scss';
+@import '5-components/_01-header';
+@import '5-components/_02-logo';
+@import '5-components/_03-header';
+@import '5-components/_03.01-menu';
+@import '5-components/_03.02-hamburger';
+@import '5-components/_03.02-langswitch';
+@import '5-components/_05-content';
+@import '5-components/_05.2-custom-map';
+@import '5-components/_05.2-custom-table';
+@import '5-components/_05.2-custom-columns';
+@import '5-components/_05.3-pop-up';
+@import '5-components/_05.4-signup-form';
+@import '5-components/_05.5-workshop-voucher-signup';
+@import '5-components/_06-footer';
+// @import '5-components/_08-pop-up';
+
+@import '5-components/_00-css3-transforms.scss';
+
+
+@media (prefers-reduced-motion: reduce) {
+* { animation: none !important; transition: none !important; }
+}
+
+::-webkit-scrollbar {display:none}
+
+[data-theme], [data-theme="default"], [data-theme="highlight"] {
+}
+[data-theme], [data-theme="default"] {
+  background-color: var(--color-bg);
+  color: var(--color-primary);
+}
+
+[data-theme="dark"] {
+	--color-bg: var(--black);
+}
+[data-theme], [data-theme="default"],
+[data-theme="dark"] {
+  color: var(--color-primary);
+	.logo-container {
+		.fill {
+			fill: var(--color-primary);
+		}
+		&:hover {
+			.fill {
+				fill: var(--color-highlight);
+			}
+		}
+	}
+}
+[data-theme="dark"],
+[data-theme="blue"] {
+	--color-contrast-high: var(--white);
+	--color-primary: var(--white);
+	--color-line: hsla(180, 2%, 88%, 0.35);
+	--color-highlight: var(--black);
+}
+[data-theme="blue"] {
+	--color-bg: var(--corp-c-1);
+}
+[data-theme="highlight"] {
+	color: var(--color-highlight); 
+	--color-bg: transparent;
+}
+body {
+	overflow-x: hidden;
+	position: relative;
+}
+.wrapper {
+	width: 100%;
+	min-height: 100vh;
+	position: relative;
+	padding-top: calc(var(--pad-T) * 4.8);
+	padding-bottom: calc(var(--pad-T) * 3.0);
+	// @include mq(mq-BREAK-P) {
+	// 	padding-left: calc( (100% - #{$max-W}  - (var(--pad-R) * 2)) / 2 );
+	// 	padding-right: calc( (100% - #{$max-W}  - (var(--pad-R) * 2)) / 2 );
+	// }
+}
+.nav {
+	@include mq(mq-BREAK-P) {
+		// width: $max-W;
+		width: auto;
+		left: calc( (100% - #{$max-W}  - (var(--pad-R) * 2)) / 2 );
+		right: calc( (100% - #{$max-W}  - (var(--pad-R) * 2)) / 2 );
+	}
+}
+.content-container {
+
+}
+
+
+$columns: 12;
+.wrapper {
+	/*
+	&::before {
+		content: "";
+		display: block;
+		position: absolute;
+		top: 0;
+		bottom: 0;
+		left: var(--pad-R);
+		right: var(--pad-R);
+		@include mq(mq-BREAK-P) {
+			left: calc( (100% - #{$max-W}  - (var(--pad-R) * 2)) / 2 );
+			right: calc( (100% - #{$max-W}  - (var(--pad-R) * 2)) / 2 );
+		}
+
+		background: linear-gradient(to right, 
+    		rgba(0, 120, 170, 0.2), 
+    		rgba(0, 120, 170, 0.2) calc(100% - var(--gutter)), 
+    		rgba(0,0,0,0) calc(100% - var(--gutter)));
+  		background-size: calc( ( 100% + var(--gutter)) / #{$columns} );
+	}
+	*/
+}
+
+.permanent-letter,
+.compact-letter {
+	@include svg-paralax(3, $dur, $stagger, $dur * 2);
+}
+.stroke {
+	stroke-width: 6;
+}
+.compact-stroke,
+.expanded-stroke {
+	stroke: hsla(0, 0%, 0%, 1.0);
+}
+.compact-stroke {
+	transition: #{$dur}s ease-in-out calc(#{$dur}s * 2);
+	// stroke-dasharray: 100, 0;	
+}
+.expanded-stroke {
+	// stroke: #A2A1E6;
+	stroke-dasharray: 0, 500;
+	stroke-dashoffset: 20px;
+	transition: #{$dur}s ease-in-out calc(#{$dur}s * 2);
+}
+.expanded-line  {
+	--delay: 1;
+	$offset: 0.25s;	
+	transform: translate($paralax-dist, 0);
+	fill: hsla(0, 0%, 0%, 0.0);	
+	@include svg-paralax(6, $dur, $stagger);
+	transition-delay: 0.0s, 0.0s;
+}
+.expanded-line-4 {
+	--delay: 4;
+}
+.expanded-line-3 {
+	--delay: 3;
+}
+.expanded-line-2 {
+	--delay: 2;
+}
+.expanded-line-1 {
+	--delay: 1;
+}
+
+[style*="--aspect-ratio"] {
+	height: var(--logo-H);
+	width: calc( var(--logo-H) * var(--aspect-ratio) );
+}
+
+.hide-text {
+  text-indent: -900px;
+  overflow: hidden;
+}
+
+.QR-img-container img {
+  margin-top: calc(var(--pad-T) * 1.5);
+  max-width: 13rem;
+}
+.indent-L {
+	padding-left: 1em;
+	max-width: 48ch;
+}
+
+.wp-block-button__link {
+  border-radius: 0 !important;
+}
+.signup-btn {
+	min-width: 12em !important;
+}

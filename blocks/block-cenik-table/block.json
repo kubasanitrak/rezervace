@@ -1,0 +1,16 @@
+{
+    "name": "acf/cenik-table",
+    "title": "Ceník table",
+    "description": "A custom table block.",
+    "category": "formatting",
+    "icon": "admin-comments",
+    "keywords": ["table item", "cenik"],
+    "acf": {
+        "mode": "preview",
+        "renderTemplate": "BLOCK-cenik-table.php"
+    },
+    "supports": {
+        "anchor": true,
+        "jsx": true
+    }
+}

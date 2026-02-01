@@ -1,0 +1,239 @@
+.signup-form--wrapper {
+	// margin-top: ;
+		--tile-C: var(--LKBA-green);
+		--tile-bg: var(--color-bg);
+}
+.signup-form--submit_message {}
+.signup-form-container {}
+.signup-form {}
+.signup-form--inner {}
+.signup-form--inner_row {
+	&:not(.mar-B-0) {
+		margin-bottom: calc(var(--pad-T) * 1.5);
+		@include mq(mq-land) {
+			margin-bottom: calc(var(--pad-T) * 1.0);
+		}
+	}
+	&.flex-col {
+		display: flex;
+		flex-direction: column;
+	}
+	&:not(.full-W) {
+		width: 100%;
+		max-width: 26rem;
+	}
+}
+.workshop-terms {
+	display: flex;
+	flex-direction: column;
+	gap: calc(var(--gap) * 2);
+	@include mq(mq-land) {
+		flex-direction: row;
+	}
+	&--item {
+		// margin-block-start: 0;
+		--tile-C: var(--LKBA-green);
+		border: $line-THICK solid var(--tile-C);
+		&_label {
+      font-weight: normal;
+      text-align: center;
+      padding: calc(var(--pad-T) * 2.5) calc(var(--pad-R) * .5) calc(var(--pad-T) * 1.0);
+			@include mq(mq-land) {
+	      padding: calc(var(--pad-T) * 1.5) calc(var(--pad-R) * .75) calc(var(--pad-T) * .5);
+	    }
+		}
+		&_caption {
+	      color: var(--tile-C);
+	      position: relative;
+
+	      &::before {
+	      	content: "";
+	      	display: block;
+	      	position: absolute;
+	      	top: 50%;
+	      	left: 50%;
+	      	transform: translate(-50%, -50%);
+	      	width: 200%;
+	      	height: 0;
+	      	padding-bottom: 200%;
+	      	background-color: var(--tile-bg);
+	      	z-index: -1;
+	      }
+		}
+		&_date {
+			font-size: $fz-H2;
+      font-family: 'InterB-var';
+		}
+		&_hour {
+      font-family: 'InterR-var';
+		}
+		&_hour,
+		&_place {
+			// font-size: $fz-H3;
+		}
+		&_place {
+      font-family: 'InterB-var';
+		}
+	}
+}
+
+
+.nice-input {
+        // display: inline-block;
+        display: block;
+        // line-height: var(--radio-R);
+        position: relative;
+        width: 100%;
+        height: 100%;
+        // padding-left: calc(var(--radio-R) * 1.5);
+        cursor: pointer;
+        vertical-align: middle;
+        -webkit-user-select: none;
+        -moz-user-select: none;
+        -ms-user-select: none;
+        user-select: none;
+        overflow: hidden;
+        // background-color: var(--tile-bg);
+        
+
+        /* Hide the browser's default checkbox */
+        input {
+            position: absolute;
+            opacity: 0;
+            cursor: pointer;
+            height: 0;
+            width: 0;
+        }
+				&.deactivated {
+          opacity: 0.5;
+          cursor: not-allowed;
+          &:hover input ~ .checkmark 
+          {
+              // background-color: --color-bg !important;
+          }   
+        }
+/* Create a custom checkbox */
+        .checkmark {
+            position: absolute;
+            // top: -1px;
+            // top: calc((#{$fz-H4} - var(--radio-R)) / 2);
+            top: calc(var(--pad-T) * .0);
+            left: 50%;
+            transform: translateX(-50%);
+
+            height: var(--radio-R);
+            width: var(--radio-R);
+            background-color: var(--color-bg);
+            border-radius: var(--radio-R);
+            // vertical-align: middle;
+            border: $line-THICK solid var(--black);
+            display: block;
+
+            /* Create the checkmark/indicator (hidden when not checked) */
+            &:after {
+                content: "";
+                position: absolute;
+                width: calc(var(--radio-R) / 2);
+                height: calc(var(--radio-R) / 2);
+                top: 50%;
+                left: 50%;
+                transform: translate(-50%, -50%);
+                border-radius: 50%;
+                background-color: var(--black);
+                display: none;
+            }
+        }
+				
+				&:hover input ~ .checkmark {
+            background-color: var(--color-bg);
+            border-color: var(--black);
+        }
+				input:checked ~ .checkmark {
+            background-color: var(--color-bg);
+            // border-color: var(--black);
+        }
+				input:checked ~ .checkmark:after {
+            display: block;
+        }
+				 .err {
+            color: red;
+            display: none;
+        }
+}
+.signup-form {
+	.submit-btn {
+		border: $line-THICK solid var(--LKBA-green);
+		background-color: var(--tile-bg);
+		color: var(--tile-C);
+
+    @include mq(mq-land-L-UP) {
+    	max-width: 14rem;
+    }
+  }
+	.submit-btn:hover,
+	.nice-input:hover,
+	.nice-input input:checked ~ .workshop-terms--item_caption {
+	  --tile-C: var(--color-bg);
+	}
+	.submit-btn:hover,
+	.nice-input:hover {
+	  --tile-bg: hsla(var(--LKBA-green-hsl), .75);
+	}
+	.submit-btn:focus,
+	.submit-btn:focus-within,
+	.submit-btn:focus-visible,
+	.submit-btn:active,
+	.nice-input input:checked ~ .workshop-terms--item_caption {
+	  --tile-C: var(--color-bg);
+	  --tile-bg: var(--LKBA-green);
+	}
+	.btn-major {
+    font-size: calc(#{$fz-H3} * .75);
+      @include mq(mq-land-L-UP) {
+          
+      }
+  }
+	.submit-btn,
+	[type="text"],
+	[type="email"],
+	[type="phone"],
+	textarea {
+	      padding: calc(var(--pad-T) * 0.75) calc(var(--pad-R) * 0.5);
+	      @include mq(mq-land) {
+		      padding: calc(var(--pad-T) * 0.35) calc(var(--pad-R) * 0.5);
+	      }
+	}
+	[type="text"],
+	[type="email"],
+	[type="phone"],
+	textarea {
+	      border: 1px solid var(--LKBA-cream-dark);
+	      // display: inline-block;
+	      // height: 38px;
+	      vertical-align: top;
+	      box-sizing: border-box;
+	      border-radius: 0;
+	      color: var(--color-primary);
+	      font-size: $fz-PLAIN;
+	      outline: none;
+	      background-color: hsla(155, 0%, 100%, 0.3);
+
+      &::placeholder {
+      	color: var(--gray3);
+      }
+
+	    &:focus, &:active {
+	        border: 1px solid var(--LKBA-red);
+		      background-color: hsla(155, 0%, 100%, 0.7);
+	    }
+
+	    &.wider {
+	        max-width: 250px;
+	        width: 100%;
+	    }
+
+	    &.widest {
+	        width: 100%;
+	    }
+	}
+}
