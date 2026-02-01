@@ -1,3 +1,24 @@
+Chyba databáze WordPressu: [Unknown column 'name' in 'field list']
+INSERT INTO `wp_barre_lessons` (`date`, `start_time`, `duration`, `name`, `instructor_id`, `capacity`, `used_spots`, `price`, `created_at`) VALUES ('2026-01-12', '10:00:00', 60, 'BARRE', 13, 22, 0, 500.000000, '2026-01-11 20:04:10')
+
+
+ 	id
+ 	lesson_post_id
+ 	location
+ 	date
+ 	start_time
+ 	duration
+ 	price
+ 	instructor_id
+ 	capacity
+ 	used_spots
+ 	is_recurring
+ 	recurrence_rule
+ 	recurrence_end
+ 	master_id 
+
+ 	
+
 .schedule>.schedule-col.schedule-col--time+.schedule-col.schedule-col--day>h2.schedule-day+.lesson>h3.lesson-title+h3.lesson-instructor+p.lesson-available+p.lesson-price
 
 06:00
