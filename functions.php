@@ -866,6 +866,7 @@ function barre_schedule_add_new_page() {
 // ───────────────────────────────────────────────
 
 function barre_schedule_edit_page() {
+    
     // At the beginning of barre_schedule_edit_page()
 
     if (isset($_POST['barre_update_lesson']) && check_admin_referer('barre_edit_lesson_action')) {
