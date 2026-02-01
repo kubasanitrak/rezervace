@@ -110,39 +110,6 @@ document.addEventListener('DOMContentLoaded', () => {
         const rangeText = `${formatDate(currentMonday)} – ${formatDate(sunday)}`;
         weekRangeEl.textContent = rangeText;
     }
-    /*/
-    function createLessonSlot(lesson) {
-        const slot = document.createElement('div');
-        slot.className = 'lesson-slot';
-        
-        // Determine status
-        const available = lesson.capacity - lesson.used;
-        let statusClass = 'available';
-        if (available <= 0) statusClass = 'full';
-        else if (available <= 3) statusClass = 'almost-full';
-        
-        slot.classList.add(statusClass);
-        
-        slot.innerHTML = `
-            <div class="lesson-name">${lesson.name}</div>
-            <div class="lesson-time">${lesson.start_time} – ${lesson.end_time}</div>
-            <div class="lesson-instructor">👤 ${lesson.instructor}</div>
-            <div class="capacity-info">
-                ${available > 0 ? `${available}/${lesson.capacity}` : 'Full'}
-            </div>
-        `;
-
-        if (available > 0) {
-            slot.addEventListener('click', () => {
-                // Here you will later open modal / add to basket
-                // alert(`Selected: ${lesson.name} at ${lesson.start_time} on ${lesson.date}`);
-                // Future: addToBasket(lesson.id, 1);
-            });
-        }
-
-        return slot;
-    }
-    /*/
 
     // =============================================
     //   Connect to lesson slots (update createLessonSlot)
@@ -186,7 +153,6 @@ document.addEventListener('DOMContentLoaded', () => {
 
         return slot;
     }
-    //*/
 
     function renderCalendar(lessonsData = {}) {
         calendarContainer.innerHTML = '';
@@ -239,87 +205,7 @@ document.addEventListener('DOMContentLoaded', () => {
         }
     }
 
-
-    
-    //*/
-    // Simulated / placeholder AJAX function
     async function fetchBARRELessons(from, to) {
-        // In real project replace with real AJAX call:
-        // return fetch(ajaxurl, {
-        //     method: 'POST',
-        //     headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
-        //     body: new URLSearchParams({
-        //         action: 'barre_load_schedule',
-        //         from_date: from,
-        //         to_date: to,
-        //         _ajax_nonce: barreAjax.nonce
-        //     })
-        // }).then(r => r.json());
-
-        // For demo - fake data
-        return new Promise(resolve => {
-            setTimeout(() => {
-                const fakeData = {};
-                const sampleLessons = [
-                    { name: "Morning Flow", start_time: "07:00", end_time: "08:15", instructor: "Anna", capacity: 14, used: 8 },
-                    { name: "Power Vinyasa", start_time: "18:00", end_time: "19:30", instructor: "Martin", capacity: 16, used: 15 },
-                    { name: "Gentle BARRE", start_time: "09:00", end_time: "10:15", instructor: "Lucie", capacity: 12, used: 12 }
-                ];
-
-                for (let i = 0; i < 7; i++) {
-                    const d = new Date(currentMonday);
-                    d.setDate(currentMonday.getDate() + i);
-                    const dateKey = d.toISOString().split('T')[0];
-                    
-                    if (i % 2 === 0) { // some days have classes
-                        fakeData[dateKey] = [
-                            ...sampleLessons.slice(0, 2),
-                            { ...sampleLessons[2], used: 0 }
-                        ];
-                    }
-                }
-                resolve(fakeData);
-            }, 800);
-        });
-    }
-    // ==========================================
-    //           Navigation & Data Loading
-    // ==========================================
-    function loadWeek() {
-        updateWeekRange();
-
-        const mondayStr = currentMonday.toISOString().split('T')[0];
-        const sunday = new Date(currentMonday);
-        sunday.setDate(currentMonday.getDate() + 6);
-        const sundayStr = sunday.toISOString().split('T')[0];
-
-        // Real implementation will use AJAX here
-        fetchBARRELessons(mondayStr, sundayStr)
-            .then(data => renderCalendar(data))
-            .catch(err => {
-                console.error('Failed to load lessons:', err);
-                calendarContainer.innerHTML = '<p style="grid-column: 2 / -1; text-align:center; padding:2rem;">Error loading schedule...</p>';
-            });
-    }
-/*/ REPLACE WITH REAL AJAX = Real WordPress AJAX Loading
-    async function fetchBARRELessons(from, to) {
-        // WordPress localized script variables (you need to enqueue them)
-        // Assume you have something like:
-        // wp_localize_script('barre-schedule-js', 'barreAjax', [
-        //     'ajaxurl' => admin_url('admin-ajax.php'),
-        //     'nonce'   => wp_create_nonce('barre_schedule_nonce')
-        // ]);
-        // In real project replace with real AJAX call:
-        // return fetch(ajaxurl, {
-        //     method: 'POST',
-        //     headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
-        //     body: new URLSearchParams({
-        //         action: 'barre_load_schedule',
-        //         from_date: from,
-        //         to_date: to,
-        //         _ajax_nonce: barreAjax.nonce
-        //     })
-        // }).then(r => r.json());
 
         if (!window.barreAjax) {
             console.error('barreAjax object not found. Make sure wp_localize_script is set.');
@@ -380,7 +266,7 @@ document.addEventListener('DOMContentLoaded', () => {
                     </div>`;
             });
     }
-//*/
+
     // Navigation
     prevBtn.addEventListener('click', () => {
         currentMonday.setDate(currentMonday.getDate() - 7);
