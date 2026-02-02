@@ -1466,6 +1466,7 @@ add_action('wp_ajax_barre_admin_load_schedule', 'barre_admin_load_schedule_ajax'
 /**/
 
 function enqueue_barre_schedule_scripts() {
+  
     // Only on pages where you need it
     // if (is_page_template('template-schedule.php') || has_shortcode(get_post()->post_content, 'barre_schedule')) {
     if (is_page_template('page-schedule-template.php') || has_shortcode(get_post()->post_content, 'barre_schedule')) {
@@ -1482,7 +1483,9 @@ function enqueue_barre_schedule_scripts() {
             'barreAjax',
             [
                 'ajaxurl' => admin_url('admin-ajax.php'),
-                'nonce'   => wp_create_nonce('barre_schedule_nonce')
+                'nonce'   => wp_create_nonce('barre_schedule_nonce'),
+                // PASS PHP VARIABLE TO JS
+                'example_variable' => 'Hello, world NOW!'
             ]
         );
 
