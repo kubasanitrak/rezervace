@@ -497,6 +497,16 @@ function barre_admin_menu() {
         'barre-schedule-edit',
         'barre_schedule_edit_page'
     );
+
+    // Settings subpage
+    add_submenu_page(
+        'barre-schedule', 
+        'Schedule Settings', 
+        'Settings',      
+        'setting_options',
+        'barre-schedule-settings', 
+        'barre_schedule_settings_page'
+    );
 }
 
 add_action('admin_menu', 'barre_admin_menu');
