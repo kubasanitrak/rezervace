@@ -503,7 +503,7 @@ function barre_admin_menu() {
         'barre-schedule', 
         'Schedule Settings', 
         'Settings',      
-        'setting_options',
+        'manage_options',
         'barre-schedule-settings', 
         'barre_schedule_settings_page'
     );
@@ -561,6 +561,22 @@ function barre_schedule_main_page() {
     wp_enqueue_style('barre-admin-style', get_stylesheet_directory_uri() . '/assets/css/admin-schedule.css');
 }
 
+
+// ───────────────────────────────────────────────
+//   SCHEDULE SETTINGS PAGE
+// ───────────────────────────────────────────────
+
+function barre_schedule_settings_page() {
+    if (!current_user_can('manage_options')) {
+        wp_die('Access denied.');
+    }
+    // GLOBAL SETTINGS FOR NUM SPOTS LIMITS, SECRET AND PRIVATE KEYS, ETC.
+    ?>
+     <div class="wrap">
+        <h1>BARRE Settings</h1>
+    </div>
+    <?php
+}
 
 // ───────────────────────────────────────────────
 //   ADD NEW LESSON PAGE
