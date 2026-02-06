@@ -1582,8 +1582,11 @@ function barre_load_schedule_ajax_handler() {
             'start_time'    => substr($row['start_time'], 0, 5), // HH:MM
             'end_time'      => date('H:i', strtotime($row['start_time'] . " +{$row['duration']} minutes")),
             'instructor'    => $instructor_name,
-            'capacity'      => (int)$row['capacity'],
-            'used'          => (int)$row['used'],
+            // 'capacity'      => (int)$row['capacity'],
+            // 'used'          => (int)$row['used'],
+            'used'      => (int)$row['used_spots'],
+            'capacity'  => (int)$row['capacity'],
+            'available' => (int)$row['capacity'] - (int)$row['used_spots'],
             'price'         => floatval($row['price'])
         ];
     }
