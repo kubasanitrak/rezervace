@@ -47,7 +47,7 @@
                 <!-- Modal for selecting number of persons -->
                 <!-- <div id="addToBasketModal" class="modal" style="display:none;">
                     <div class="modal-content">
-                        <span class="modal-close" id="closeModal">×</span>
+                        <span class="btn btn-icn btn-icn--close modal-close" id="closeModal">×</span>
                         
                         <h2 id="modalLessonName">Add to Basket</h2>
                         <p id="modalLessonInfo"></p>
@@ -75,7 +75,7 @@
                 <!-- Modal for selecting number of persons -->
                 <div id="addToBasketModal" class="modal" style="display:none;">
                     <div class="modal-content">
-                        <span class="modal-close" id="closeModal">×</span>
+                        <span class="btn btn-icn btn-icn--close modal-close" id="closeModal">×</span>
                         
                         <h2 id="modalLessonName">Add to Basket</h2>
                         <p id="modalLessonInfo"></p>
@@ -95,7 +95,7 @@
                         </div>
                         
                         <div class="modal-actions">
-                            <button id="cancelAdd" class="btn-secondary">Cancel</button>
+                            <button id="cancelAdd" class="btn-secondary modal-close">Cancel</button>
                             <button id="confirmAdd" class="btn-primary">Add to Basket</button>
                         </div>
                     </div>
@@ -104,12 +104,12 @@
                 <!-- Success modal (added to basket) -->
 <div id="successModal" class="modal" style="display:none;">
     <div class="modal-content success-modal">
-        <span class="modal-close" id="closeSuccess">×</span>
+        <span class="btn btn-icn btn-icn--close modal-close" id="closeSuccess">×</span>
         <div class="modal-icon">✓</div>
         <h2>Successfully Added!</h2>
         <p id="successMessage">Your lesson has been added to the basket.</p>
         <div class="modal-actions">
-            <button id="continueShopping" class="btn-secondary">Continue Shopping</button>
+            <button id="continueShopping" class="btn-secondary modal-close">Continue Shopping</button>
             <button id="viewBasketBtn" class="btn-primary">View Basket</button>
         </div>
     </div>
@@ -118,12 +118,12 @@
 <!-- Error modal (e.g. already in basket, not enough spots) -->
 <div id="errorModal" class="modal" style="display:none;">
     <div class="modal-content error-modal">
-        <span class="modal-close" id="closeError">×</span>
+        <span class="btn btn-icn btn-icn--close modal-close" id="closeError">×</span>
         <div class="modal-icon error-icon">⚠</div>
         <h2>Oops!</h2>
         <p id="errorMessage">Something went wrong.</p>
         <div class="modal-actions">
-            <button id="closeErrorBtn" class="btn-primary">OK</button>
+            <button id="closeErrorBtn" class="btn-primary modal-close">OK</button>
         </div>
     </div>
 </div>
@@ -131,11 +131,11 @@
 <!-- Clear basket confirmation -->
 <div id="clearConfirmModal" class="modal" style="display:none;">
     <div class="modal-content">
-        <span class="modal-close" id="closeClear">×</span>
+        <span class="btn btn-icn btn-icn--close modal-close" id="closeClear">×</span>
         <h2>Clear Basket?</h2>
         <p>This will remove all items from your basket. This action cannot be undone.</p>
         <div class="modal-actions">
-            <button id="cancelClear" class="btn-secondary">Cancel</button>
+            <button id="cancelClear" class="modal-close btn-secondary">Cancel</button>
             <button id="confirmClear" class="btn-danger">Yes, Clear Basket</button>
         </div>
     </div>

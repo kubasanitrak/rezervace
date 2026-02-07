@@ -208,7 +208,7 @@ function my_login_logo_url_title() {
 add_filter( 'login_headertext', 'my_login_logo_url_title' );
 
 /* / — / — / — / — / — / – */
-/* CUSTOMIZE WP LOGIN PAGE */
+/* END CUSTOMIZE WP LOGIN PAGE */
 /* / — / — / — / — / — / – */
 /* / — / — / — / — / — / – */
 
@@ -284,6 +284,12 @@ add_filter(
                 return $attr;
         }
 );
+
+add_action( 'wp_enqueue_scripts', 'rezervace_theme_scripts' );
+function rezervace_theme_scripts() {
+    wp_register_script('rezervace_theme_gsap', get_template_directory_uri() . '/assets/js/libs/gsap.min.js', array(), '1.0.1', true);
+    wp_enqueue_script('rezervace_theme_gsap');
+}
 
 /* / — / — / — / — / — / – / — / — / — / — / – */
 /* / — / — / — / — / — / – / — / — / — / — / – */
