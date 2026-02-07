@@ -288,42 +288,44 @@
 
 /* Stepper buttons */
 .quantity-stepper {
-    display: flex;
+    display: inline-flex;
     align-items: center;
-    gap: 0.5rem;
-    margin-top: 0.6rem;
+    border: 1px solid #ccc;
+    border-radius: 6px;
+    overflow: hidden;
+    margin-top: 8px;
 }
 
 .stepper-btn {
-    width: 40px;
-    height: 40px;
-    background: #f0f0f0;
-    border: 1px solid #ccc;
-    border-radius: 6px;
-    font-size: 1.2rem;
+    width: 44px;
+    height: 44px;
+    background: #f8f9fa;
+    border: none;
+    font-size: 1.4rem;
+    font-weight: bold;
     cursor: pointer;
-    transition: background 0.2s;
+    transition: background 0.15s;
 }
 
-.stepper-btn:hover {
-    background: #e0e0e0;
+.stepper-btn:hover:not(:disabled) {
+    background: #e9ecef;
 }
 
 .stepper-btn:disabled {
-    background: #f8f9fa;
-    color: #ccc;
+    background: #f0f0f0;
+    color: #aaa;
     cursor: not-allowed;
 }
 
 #personsDisplay {
-    width: 60px;
+    min-width: 60px;
     text-align: center;
-    font-size: 1.1rem;
-    font-weight: bold;
-    border: 1px solid #ccc;
-    border-radius: 6px;
-    padding: 8px;
-    background: #fff;
+    font-size: 1.25rem;
+    font-weight: 600;
+    padding: 0 16px;
+    border-left: 1px solid #ccc;
+    border-right: 1px solid #ccc;
+    background: white;
 }
 
 /* MESSAGING MODALS */

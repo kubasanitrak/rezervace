@@ -45,7 +45,7 @@
                 </div>
 
                 <!-- Modal for selecting number of persons -->
-                <div id="addToBasketModal" class="modal" style="display:none;">
+                <!-- <div id="addToBasketModal" class="modal" style="display:none;">
                     <div class="modal-content">
                         <span class="modal-close" id="closeModal">×</span>
                         
@@ -71,9 +71,9 @@
                             <button id="confirmAdd" class="btn-primary">Add to Basket</button>
                         </div>
                     </div>
-                </div>
+                </div> -->
                 <!-- Modal for selecting number of persons -->
-                <!-- <div id="addToBasketModal" class="modal" style="display:none; opacity:0;">
+                <div id="addToBasketModal" class="modal" style="display:none;">
                     <div class="modal-content">
                         <span class="modal-close" id="closeModal">×</span>
                         
@@ -83,9 +83,9 @@
                         <div class="form-group">
                             <label>Number of persons:</label>
                             <div class="quantity-stepper">
-                                <button id="decrementPersons" class="stepper-btn">-</button>
-                                <span id="personsDisplay">1</span>
-                                <button id="incrementPersons" class="stepper-btn">+</button>
+                                <button type="button" id="decrement" class="stepper-btn" aria-label="Decrease">-</button>
+                                <span id="personsDisplay" aria-live="polite">1</span>
+                                <button type="button" id="increment" class="stepper-btn" aria-label="Increase">+</button>
                             </div>
                         </div>
                         
@@ -99,7 +99,7 @@
                             <button id="confirmAdd" class="btn-primary">Add to Basket</button>
                         </div>
                     </div>
-                </div> -->
+                </div>
 
                 <!-- Success modal (added to basket) -->
 <div id="successModal" class="modal" style="display:none;">

@@ -230,11 +230,6 @@ document.addEventListener('DOMContentLoaded', () => {
 
     let basket = JSON.parse(sessionStorage.getItem(BASKET_KEY)) || [];
 
-    // Format: [
-    //   { lessonId: 123, name: "...", date: "2026-01-12", time: "18:00", price: 400, persons: 1 },
-    //   ...
-    // ]
-
     function saveBasket() {
         sessionStorage.setItem(BASKET_KEY, JSON.stringify(basket));
         updateBasketUI();
@@ -311,18 +306,6 @@ document.addEventListener('DOMContentLoaded', () => {
 
 
     // Add to basket from lesson slot
-
-    /*/
-    // Clear basket button
-    document.addEventListener('click', function(e) {
-        if (e.target.id === 'clearBasket') {
-            if (confirm("Clear entire basket?")) {
-                basket = [];
-                saveBasket();
-            }
-        }
-    });
-    /*/
     // === REPLACE CONFIRM() FOR CLEAR BASKET ===
     document.addEventListener('click', function(e) {
         if (e.target.id === 'clearBasket') {
@@ -333,7 +316,6 @@ document.addEventListener('DOMContentLoaded', () => {
             }
         }
     });
-    //*/
 
     // Checkout button – later will redirect to checkout page
     document.addEventListener('click', function(e) {
@@ -351,60 +333,74 @@ document.addEventListener('DOMContentLoaded', () => {
         updateBasketUI();
     });
 
-//*/
+
     // Global variables for modal
     const modal = document.getElementById('addToBasketModal');
     let currentLessonToAdd = null;
-
+    let currentPersons     = 1;
+    
     // Open modal when lesson is clicked
     function openAddToBasketModal(lesson) {
         currentLessonToAdd = lesson;
+        currentPersons = 1;
 
-        // Fill modal content
         document.getElementById('modalLessonName').textContent = lesson.name;
         document.getElementById('modalLessonInfo').innerHTML = `
             ${lesson.date} • ${lesson.start_time} – ${lesson.end_time}<br>
             Instructor: ${lesson.instructor}<br>
-            Price per person: ${lesson.price} Kč
+            Price per person: ${lesson.price.toLocaleString('cs-CZ')} Kč
         `;
-        
-        const available = lesson.available;
+
+        const available = Number(lesson.available) || 0;
         document.getElementById('modalAvailable').textContent = available;
 
-        const select = document.getElementById('modalPersons');
-        select.innerHTML = ''; // clear previous options
+        // Initialize display
+        document.getElementById('personsDisplay').textContent = currentPersons;
+        updateStepperState(available);
 
-        for (let i = 1; i <= 3; i++) {
-            if (i <= available) {
-                const opt = document.createElement('option');
-                opt.value = i;
-                opt.textContent = `${i} person${i > 1 ? 's' : ''}`;
-                select.appendChild(opt);
-            }
-        }
-
-        // Default to 1 or max available
-        select.value = Math.min(1, available);
-
-        // Initial price calculation
         updateModalTotalPrice();
 
         // Show modal
         document.getElementById('addToBasketModal').style.display = 'flex';
     }
 
-    // Update total price live when persons change
+    // Update total price display
     function updateModalTotalPrice() {
         if (!currentLessonToAdd) return;
-        
-        const persons = parseInt(document.getElementById('modalPersons').value) || 0;
-        const total = persons * currentLessonToAdd.price;
-        
+        const total = currentPersons * currentLessonToAdd.price;
         document.getElementById('modalTotalPrice').textContent = 
             total.toLocaleString('cs-CZ') + ' Kč';
-        
-        document.getElementById('confirmAdd').disabled = (persons < 1 || persons > currentLessonToAdd.available);
     }
+
+    // Enable/disable +/- buttons and confirm button
+    function updateStepperState(available) {
+        const maxAllowed = Math.min(3, available);
+        
+        document.getElementById('decrement').disabled = currentPersons <= 1;
+        document.getElementById('increment').disabled = currentPersons >= maxAllowed;
+        document.getElementById('confirmAdd').disabled = currentPersons < 1 || currentPersons > available;
+    }
+
+    // Stepper logic
+    document.getElementById('decrement')?.addEventListener('click', () => {
+        if (currentPersons > 1) {
+            currentPersons--;
+            document.getElementById('personsDisplay').textContent = currentPersons;
+            updateModalTotalPrice();
+            updateStepperState(currentLessonToAdd?.available || 0);
+        }
+    });
+
+    document.getElementById('increment')?.addEventListener('click', () => {
+        const available = currentLessonToAdd?.available || 0;
+        const max = Math.min(3, available);
+        if (currentPersons < max) {
+            currentPersons++;
+            document.getElementById('personsDisplay').textContent = currentPersons;
+            updateModalTotalPrice();
+            updateStepperState(available);
+        }
+    });
 
     // Close modal handlers
     function closeModal() {
@@ -419,75 +415,34 @@ document.addEventListener('DOMContentLoaded', () => {
     document.getElementById('addToBasketModal')?.addEventListener('click', function(e) {
         if (e.target === this) closeModal();
     });
-    // Esc key to close
+    // Esc key to close && Esc key for all modals
     document.addEventListener('keydown', e => {
         if (e.key === 'Escape' && modal?.style.display === 'flex') {
             closeModal();
         }
+        if (e.key === 'Escape') closeAllModals();
     });
-//*/
-// === REPLACE OLD PROMPT + ALERTS IN CONFIRM ADD ===
-document.getElementById('confirmAdd')?.addEventListener('click', function() {
-    if (!currentLessonToAdd) return;
 
-    const persons = parseInt(document.getElementById('modalPersons').value);
-
-    if (persons > currentLessonToAdd.available) {
-        showErrorModal('Not enough spots available!');
-        return;
-    }
-
-    const item = {
-        lessonId: currentLessonToAdd.id,
-        name: currentLessonToAdd.name,
-        date: currentLessonToAdd.date,
-        time: currentLessonToAdd.start_time,
-        price: currentLessonToAdd.price,
-        persons: persons
-    };
-
-    // Check for duplicate
-    const alreadyExists = basket.some(i => i.lessonId === item.lessonId);
-    if (alreadyExists) {
-        showErrorModal('This lesson is already in your basket.');
-        closeModal(); // close person selection modal
-        return;
-    }
-
-    // SUCCESS → add and show modal
-    basket.push(item);
-    saveBasket();
-    updateBasketUI();
-
-    showSuccessModal(`${item.name} × ${persons} person${persons > 1 ? 's' : ''} added to basket!`);
-    closeModal(); // close person selection modal
-});
-/*/
-    // Confirm → add to basket
-    document.getElementById('confirmAdd')?.addEventListener('click', function() {
+    document.getElementById('confirmAdd')?.addEventListener('click', () => {
         if (!currentLessonToAdd) return;
 
-        const persons = parseInt(document.getElementById('modalPersons').value);
-
-        if (persons > currentLessonToAdd.available) {
-            alert('Not enough spots available!');
+        const available = currentLessonToAdd.available || 0;
+        if (currentPersons > available) {
             showErrorModal('Not enough spots available!');
             return;
         }
 
         const item = {
             lessonId: currentLessonToAdd.id,
-            name: currentLessonToAdd.name,
-            date: currentLessonToAdd.date,
-            time: currentLessonToAdd.start_time,
-            price: currentLessonToAdd.price,
-            persons: persons
+            name:     currentLessonToAdd.name,
+            date:     currentLessonToAdd.date,
+            time:     currentLessonToAdd.start_time,
+            price:    currentLessonToAdd.price,
+            persons:  currentPersons
         };
 
-        // Check duplicate (same lesson already in basket)
-        const alreadyExists = basket.some(i => i.lessonId === item.lessonId);
-        if (alreadyExists) {
-            alert('This lesson is already in your basket.');
+        // Prevent duplicate
+        if (basket.some(i => i.lessonId === item.lessonId)) {
             showErrorModal('This lesson is already in your basket.');
             closeModal();
             return;
@@ -495,10 +450,13 @@ document.getElementById('confirmAdd')?.addEventListener('click', function() {
 
         basket.push(item);
         saveBasket();
-        alert(`Added: ${item.name} × ${persons} person(s)`);
+        updateBasketUI();
+
+        // Show success feedback (you can replace alert with nicer modal later)
+        showSuccessModal(`${item.name} × ${currentPersons} person${currentPersons > 1 ? 's' : ''} added to basket!`);
+
         closeModal();
     });
-    //*/
 
     // Update price when selection changes
     document.getElementById('modalPersons')?.addEventListener('change', updateModalTotalPrice);
@@ -540,7 +498,9 @@ document.getElementById('confirmAdd')?.addEventListener('click', function() {
 
     document.getElementById('viewBasketBtn')?.addEventListener('click', () => {
         closeAllModals();
-        document.getElementById('basketContent').style.display = 'block';
+        const modal = document.getElementById('basketContent');
+        modal.style.display = 'block';
+        setTimeout(() => modal.classList.add('show'), 400);
     });
 
     document.getElementById('confirmClear')?.addEventListener('click', () => {
@@ -551,10 +511,6 @@ document.getElementById('confirmAdd')?.addEventListener('click', function() {
         showSuccessModal('Your basket has been cleared.');
     });
 
-    // Esc key for all modals
-    document.addEventListener('keydown', e => {
-        if (e.key === 'Escape') closeAllModals();
-    });
     
 
 });
