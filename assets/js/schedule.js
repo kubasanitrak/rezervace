@@ -492,7 +492,8 @@ document.addEventListener('DOMContentLoaded', () => {
     }
 
     // Close handlers
-    document.querySelectorAll('.modal-close, #closeErrorBtn, #continueShopping, #cancelClear').forEach(el => {
+    let _closeBtnsArr = gsap.utils.toArray(".modal-close");
+    _closeBtnsArr.forEach(el => {
         el?.addEventListener('click', closeAllModals);
     });
 

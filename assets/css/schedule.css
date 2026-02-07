@@ -222,7 +222,7 @@
     to   { opacity: 1; transform: translateY(0); }
 }
 
-.modal-close {
+.btn-icn--close {
     position: absolute;
     top: 12px;
     right: 18px;
@@ -231,7 +231,7 @@
     color: #777;
 }
 
-.modal-close:hover {
+.btn-icn--close:hover {
     color: #333;
 }
 
