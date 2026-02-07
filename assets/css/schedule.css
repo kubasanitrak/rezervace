@@ -190,11 +190,17 @@
     z-index: 2000;
     transition: opacity 0.3s ease-out;
 }
+.basket-content.show,
+.modal {
+    transition: opacity 0.3s ease-out;
+}
 
+.basket-content.show,
 .modal.show {
     opacity: 1;
 }
 
+.basket-content.hide,
 .modal.hide {
     opacity: 0;
 }

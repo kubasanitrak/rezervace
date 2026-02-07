@@ -499,8 +499,12 @@ document.addEventListener('DOMContentLoaded', () => {
     document.getElementById('viewBasketBtn')?.addEventListener('click', () => {
         closeAllModals();
         const modal = document.getElementById('basketContent');
-        modal.style.display = 'block';
-        setTimeout(() => modal.classList.add('show'), 400);
+        // modal.style.display = 'block';
+        // setTimeout(() => modal.classList.add('show'), 400);
+        setTimeout(function () {
+            modal.style.display = 'block';
+            modal.classList.add('show');
+        }, 500);
     });
 
     document.getElementById('confirmClear')?.addEventListener('click', () => {
@@ -508,7 +512,7 @@ document.addEventListener('DOMContentLoaded', () => {
         saveBasket();
         closeAllModals();
         updateBasketUI(); // refresh floating basket
-        showSuccessModal('Your basket has been cleared.');
+        setTimeout(showSuccessModal, 300, 'Your basket has been cleared.');
     });
 
     
