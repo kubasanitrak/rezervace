@@ -207,15 +207,19 @@ document.addEventListener('DOMContentLoaded', () => {
     }
 
     // Navigation
-    prevBtn.addEventListener('click', () => {
-        currentMonday.setDate(currentMonday.getDate() - 7);
-        loadWeek();
-    });
+    if(prevBtn) {
+        prevBtn.addEventListener('click', () => {
+            currentMonday.setDate(currentMonday.getDate() - 7);
+            loadWeek();
+        });
+    }
 
-    nextBtn.addEventListener('click', () => {
-        currentMonday.setDate(currentMonday.getDate() + 7);
-        loadWeek();
-    });
+    if(nextBtn) {
+        nextBtn.addEventListener('click', () => {
+            currentMonday.setDate(currentMonday.getDate() + 7);
+            loadWeek();
+        });
+    }
 
     // Initial load
     loadWeek();
@@ -236,6 +240,7 @@ document.addEventListener('DOMContentLoaded', () => {
     }
 
     function updateBasketUI() {
+console.log("updateBasketUI fired");
         const countEl = document.getElementById('basketCount');
         const itemsContainer = document.getElementById('basketItems');
         const totalEl = document.getElementById('basketTotal');
@@ -317,21 +322,12 @@ document.addEventListener('DOMContentLoaded', () => {
         }
     });
 
-    // Checkout button – later will redirect to checkout page
-    document.addEventListener('click', function(e) {
-        if (e.target.id === 'goToCheckout') {
-            if (basket.length === 0) return;
-            
-            // Later: window.location = '/checkout';
-            alert("Redirecting to checkout page...\n(In real project this would go to payment step)");
-            // You can also send basket to server via AJAX here
-        }
-    });
+    
 
     // Initial UI update
-    document.addEventListener('DOMContentLoaded', () => {
+    // document.addEventListener('DOMContentLoaded', () => {
         updateBasketUI();
-    });
+    // });
 
 
     // Global variables for modal
@@ -514,6 +510,38 @@ document.addEventListener('DOMContentLoaded', () => {
         closeAllModals();
         updateBasketUI(); // refresh floating basket
         setTimeout(showSuccessModal, 300, 'Your basket has been cleared.');
+    });
+
+    // Checkout button – later will redirect to checkout page
+    document.getElementById('goToCheckout')?.addEventListener('click', function() {
+        if (basket.length === 0) {
+            showErrorModal('Your basket is empty.');
+            return;
+        }
+
+        // Option A: Simple redirect (recommended for now)
+        window.location.href = '/rezervace/checkout';  // ← your checkout page slug
+/*
+        // Option B: AJAX check + redirect (if you want server-side validation first)
+        fetch(barreAjax.ajaxurl, {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
+            body: new URLSearchParams({
+                action: 'barre_check_basket_before_checkout',
+                _ajax_nonce: barreAjax.nonce
+            })
+        })
+        .then(r => r.json())
+        .then(data => {
+            if (data.success) {
+                window.location.href = '/rezervace/checkout';
+            } else {
+                showErrorModal(data.data?.message || 'Cannot proceed to checkout.');
+            }
+        })
+        .catch(() => showErrorModal('Connection error.'));
+
+        */
     });
 
     

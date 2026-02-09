@@ -38,13 +38,13 @@ document.addEventListener('DOMContentLoaded', () => {
         btn.textContent = 'Processing...';
 
         try {
-            const response = await fetch(barreAjax.ajaxurl, {
+            const response = await fetch(barreCheckoutAjax.ajaxurl, {
                 method: 'POST',
                 headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
                 body: new URLSearchParams({
                     action: 'barre_process_basket',
                     basket: JSON.stringify(basket),
-                    _ajax_nonce: barreAjax.nonce
+                    _ajax_nonce: barreCheckoutAjax.nonce
                 })
             });
 
