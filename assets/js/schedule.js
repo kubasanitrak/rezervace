@@ -512,6 +512,7 @@ console.log("updateBasketUI fired");
         setTimeout(showSuccessModal, 300, 'Your basket has been cleared.');
     });
 
+/*
     // Checkout button – later will redirect to checkout page
     document.getElementById('goToCheckout')?.addEventListener('click', function() {
         if (basket.length === 0) {
@@ -521,7 +522,6 @@ console.log("updateBasketUI fired");
 
         // Option A: Simple redirect (recommended for now)
         window.location.href = '/rezervace/checkout';  // ← your checkout page slug
-/*
         // Option B: AJAX check + redirect (if you want server-side validation first)
         fetch(barreAjax.ajaxurl, {
             method: 'POST',
@@ -541,7 +541,37 @@ console.log("updateBasketUI fired");
         })
         .catch(() => showErrorModal('Connection error.'));
 
-        */
+    });
+*/
+
+    document.getElementById('goToCheckout')?.addEventListener('click', async function() {
+        if (basket.length === 0) {
+            showErrorModal('Your basket is empty.');
+            return;
+        }
+
+        try {
+            const response = await fetch(barreAjax.ajaxurl, {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
+                body: new URLSearchParams({
+                    action: 'barre_sync_basket_to_server',
+                    basket: JSON.stringify(basket),
+                    _ajax_nonce: barreAjax.nonce
+                })
+            });
+
+            const result = await response.json();
+
+            if (result.success) {
+                // Now safe to redirect — server has the basket
+                window.location.href = '/rezervace/checkout';
+            } else {
+                showErrorModal(result.data?.message || 'Failed to prepare checkout.');
+            }
+        } catch (err) {
+            showErrorModal('Connection error while preparing checkout.');
+        }
     });
 
     

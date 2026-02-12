@@ -31,40 +31,77 @@ document.addEventListener('DOMContentLoaded', () => {
     document.getElementById('checkout-summary').innerHTML = html;
     document.getElementById('checkout-total').textContent = total.toLocaleString('cs-CZ') + ' Kč';
 
-    // Proceed to payment
-    document.getElementById('confirm-and-pay').addEventListener('click', async () => {
-        const btn = document.getElementById('confirm-and-pay');
-        btn.disabled = true;
-        btn.textContent = 'Processing...';
+    // schedule.js or checkout-specific js
+    const simulateBtn = document.getElementById('simulatePayment');
+    const modal = document.getElementById('fakePaymentModal');
+    const closeBtn = document.getElementById('closeFakePayment');
+    const cancelBtn = document.getElementById('cancelFakePayment');
+    const confirmBtn = document.getElementById('confirmFakePayment');
 
-        try {
-            const response = await fetch(barreCheckoutAjax.ajaxurl, {
-                method: 'POST',
-                headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
-                body: new URLSearchParams({
-                    action: 'barre_process_basket',
-                    basket: JSON.stringify(basket),
-                    _ajax_nonce: barreCheckoutAjax.nonce
-                })
-            });
-
-            const result = await response.json();
-
-            if (!result.success) {
-                throw new Error(result.data?.message || 'Server error');
-            }
-
-            // Redirect to Stripe
-            if (result.data?.checkout_url) {
-                window.location.href = result.data.checkout_url;
-            } else {
-                throw new Error('No checkout URL received');
-            }
-
-        } catch (err) {
-            alert('Error: ' + err.message);
-            btn.disabled = false;
-            btn.textContent = 'Proceed to Payment →';
-        }
+    // Open modal
+    simulateBtn?.addEventListener('click', () => {
+        modal.style.display = 'flex';
+        setTimeout(() => modal.classList.add('show'), 10);
     });
+
+    // Close modal
+    function closeFakeModal() {
+        modal.classList.remove('show');
+        setTimeout(() => modal.style.display = 'none', 300);
+    }
+
+    closeBtn?.addEventListener('click', closeFakeModal);
+    cancelBtn?.addEventListener('click', closeFakeModal);
+    modal?.addEventListener('click', e => { if (e.target === modal) closeFakeModal(); });
+
+    // const BASKET_KEY = 'barre_reservation_basket';
+
+    // function saveBasket() {
+    //     sessionStorage.setItem(BASKET_KEY, JSON.stringify(basket));
+    // }
+
+    // Simulate payment via AJAX
+    confirmBtn?.addEventListener('click', () => {
+        confirmBtn.disabled = true;
+        confirmBtn.textContent = 'Processing...';
+
+        fetch(barreAjax.ajaxurl, {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
+            body: new URLSearchParams({
+                action: 'barre_simulate_payment',
+                _ajax_nonce: barreAjax.nonce
+            })
+        })
+        .then(r => r.json())
+        .then(data => {
+            if (data.success) {
+                // Clear local basket
+                // if (data.data?.clear_client_basket) {
+                    // basket = [];
+                    sessionStorage.removeItem('barre_reservation_basket'); // your key
+                    // sessionStorage.removeItem(BASKET_KEY); // your key
+                    // saveBasket(); // if you have this function
+                    // updateBasketUI(); // refresh floating basket if visible
+                // }
+                // Redirect to success page
+                window.location.href = '/rezervace/reservation-success/?simulated=1';
+            } else {
+                alert('Simulation failed: ' + (data.data?.message || 'Unknown error'));
+                confirmBtn.disabled = false;
+                confirmBtn.textContent = 'Pay (Simulate)';
+            }
+        })
+        .catch(() => {
+            alert('Connection error');
+            confirmBtn.disabled = false;
+            confirmBtn.textContent = 'Pay (Simulate)';
+        });
+    });
+
+    // Esc key
+    document.addEventListener('keydown', e => {
+        if (e.key === 'Escape' && modal.style.display === 'flex') closeFakeModal();
+    });
+
 });

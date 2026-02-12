@@ -1322,60 +1322,29 @@ function enqueue_barre_schedule_scripts() {
             'barreAjax',
             [
                 'ajaxurl' => admin_url('admin-ajax.php'),
-                'nonce'   => wp_create_nonce('barre_schedule_nonce'),
+                // 'nonce'   => wp_create_nonce('barre_schedule_nonce'),
+                'nonce'   => wp_create_nonce('barre-ajax-nonce'),
                 // PASS PHP VARIABLE TO JS
                 'example_variable' => 'Hello, world NOW!'
             ]
         );
-
-        wp_enqueue_style(
-            'barre-schedule-css',
-            get_stylesheet_directory_uri() . '/assets/css/schedule.css',
-            [],
-            '1.0.0'
-        );
     }
+
+    wp_enqueue_style(
+        'barre-schedule-css',
+        get_stylesheet_directory_uri() . '/assets/css/schedule.css',
+        [],
+        '1.0.0'
+    );
 }
 add_action('wp_enqueue_scripts', 'enqueue_barre_schedule_scripts');
-
-function enqueue_barre_checkout_scripts() {
-  
-    // Only on pages where you need it
-    if (is_page_template('page-checkout-template.php') || has_shortcode(get_post()->post_content, 'barre_checkout')) {
-        wp_enqueue_script(
-            'barre-checkout-js',
-            get_stylesheet_directory_uri() . '/assets/js/checkout.js',
-            [],
-            '1.0.2',
-            true
-        );
-
-        wp_localize_script(
-            'barre-checkout-js',
-            'barreCheckoutAjax',
-            [
-                'ajaxurl' => admin_url('admin-ajax.php'),
-                'nonce'   => wp_create_nonce('barre_checkout_nonce'),
-                // PASS PHP VARIABLE TO JS
-                'example_variable' => 'Hello, checkout NOW!'
-            ]
-        );
-
-        wp_enqueue_style(
-            'barre-checkout-css',
-            get_stylesheet_directory_uri() . '/assets/css/checkout.css',
-            [],
-            '1.0.0'
-        );
-    }
-}
-add_action('wp_enqueue_scripts', 'enqueue_barre_checkout_scripts');
 
 /**
  * AJAX Handler: Load barre lessons for selected week
  */
 function barre_load_schedule_ajax_handler() {
-    check_ajax_referer('barre_schedule_nonce', '_ajax_nonce');
+    // check_ajax_referer('barre_schedule_nonce', '_ajax_nonce');
+    check_ajax_referer('barre-ajax-nonce', '_ajax_nonce');
 
     $from_date = isset($_POST['from_date']) ? sanitize_text_field($_POST['from_date']) : '';
     $to_date   = isset($_POST['to_date'])   ? sanitize_text_field($_POST['to_date'])   : '';
@@ -1445,6 +1414,284 @@ function barre_load_schedule_ajax_handler() {
 add_action('wp_ajax_barre_load_schedule', 'barre_load_schedule_ajax_handler');
 add_action('wp_ajax_nopriv_barre_load_schedule', 'barre_load_schedule_ajax_handler');
 
+/**
+————————————————————————————————————————————————————
+// CHECKOUT NONCE AND AJAX SCRIPT
+————————————————————————————————————————————————————
+*/
+/*
+function enqueue_barre_checkout_scripts() {
+  
+    // Only on pages where you need it
+    if (is_page_template('page-checkout-template.php') || has_shortcode(get_post()->post_content, 'barre_checkout')) {
+        wp_enqueue_script(
+            'barre-checkout-js',
+            get_stylesheet_directory_uri() . '/assets/js/checkout.js',
+            [],
+            '1.0.2',
+            true
+        );
+
+        wp_localize_script(
+            'barre-checkout-js',
+            'barreCheckoutAjax',
+            [
+                'ajaxurl' => admin_url('admin-ajax.php'),
+                'nonce'   => wp_create_nonce('barre_checkout_nonce'),
+                // PASS PHP VARIABLE TO JS
+                'example_variable' => 'Hello, checkout NOW!'
+            ]
+        );
+
+        wp_enqueue_style(
+            'barre-checkout-css',
+            get_stylesheet_directory_uri() . '/assets/css/checkout.css',
+            [],
+            '1.0.0'
+        );
+    }
+}
+add_action('wp_enqueue_scripts', 'enqueue_barre_checkout_scripts');
+*/
+/**
+————————————————————————————————————————————————————
+// STORE BASKET ON SERVER
+————————————————————————————————————————————————————
+*/
+
+add_action('wp_ajax_barre_sync_basket_to_server', 'barre_sync_basket_to_server');
+
+function barre_sync_basket_to_server() {
+    check_ajax_referer('barre-ajax-nonce', '_ajax_nonce');
+
+    
+    if (!is_user_logged_in()) {
+        error_log('AJAX called but user NOT logged in');
+        wp_send_json_error(['message' => 'Session expired - please log in again']);
+    }
+
+    $basket_json = isset($_POST['basket']) ? wp_unslash($_POST['basket']) : '';
+    $basket = json_decode($basket_json, true);
+
+    if (!is_array($basket) || empty($basket)) {
+        wp_send_json_error(['message' => 'Basket is empty or invalid.']);
+    }
+
+    // Store in user meta (persistent across pages/sessions)
+    update_user_meta(get_current_user_id(), 'barre_temp_basket', $basket);
+
+    // Also store in session as fallback
+    $_SESSION['barre_basket'] = json_encode($basket);
+
+    wp_send_json_success();
+}
+
+
+function barre_enqueue_checkout_scripts() {
+    // Only on checkout page
+    if (is_page_template('page-checkout-template.php') || is_page('checkout')) {  // adjust slug if needed
+
+        // Enqueue the same JS file you use for schedule/basket
+        wp_enqueue_script(
+            'barre-checkout-js',
+            get_stylesheet_directory_uri() . '/assets/js/checkout.js',  // or schedule.js if shared
+            ['jquery'],
+            '1.0.5',
+            true
+        );
+
+        // Localize barreAjax (same as on schedule page)
+        wp_localize_script('barre-checkout-js', 'barreAjax', [
+            'ajaxurl' => admin_url('admin-ajax.php'),
+            'nonce'   => wp_create_nonce('barre_nonce')   // use same nonce name
+        ]);
+
+        // Optional: enqueue modal CSS if not already global
+        
+
+        wp_enqueue_style(
+            'barre-checkout-css',
+            get_stylesheet_directory_uri() . '/assets/css/checkout.css',
+            [],
+            '1.0.0'
+        );
+    }
+}
+add_action('wp_enqueue_scripts', 'barre_enqueue_checkout_scripts');
+
+
+/**
+————————————————————————————————————————————————————
+// RESERVATION SCRIPTS AND STYLES
+————————————————————————————————————————————————————
+*/
+function barre_enqueue_myreservations_scripts() {
+    if (is_page_template('page-my-reservations.php') || is_page('my-reservations')) {  // adjust slug if needed
+        // Enqueue the same JS file you use for schedule/basket
+        wp_enqueue_script(
+            'barre-reservations-js',
+            get_stylesheet_directory_uri() . '/assets/js/my-reservations.js',  // or schedule.js if shared
+            ['jquery'],
+            '1.0.5',
+            true
+        );
+        // Localize barreAjax (same as on schedule page)
+        wp_localize_script('barre-reservations-js', 'barreAjax', [
+            'ajaxurl' => admin_url('admin-ajax.php'),
+            'nonce'   => wp_create_nonce('barre_nonce')   // use same nonce name
+        ]);
+
+        wp_enqueue_style(
+            'barre-reservations-css',
+            get_stylesheet_directory_uri() . '/assets/css/my-reservations.css',
+            [],
+            '1.0.0'
+        );
+    }
+}
+add_action('wp_enqueue_scripts', 'barre_enqueue_myreservations_scripts');
+/**
+————————————————————————————————————————————————————
+// BACKEND – RESERVATION CANCEL HANDLER
+————————————————————————————————————————————————————
+*/
+add_action('wp_ajax_barre_cancel_reservation', 'barre_cancel_reservation');
+
+function barre_cancel_reservation() {
+    check_ajax_referer('barre_nonce', '_ajax_nonce');
+
+    if (!is_user_logged_in()) {
+        wp_send_json_error(['message' => 'Not logged in']);
+    }
+
+    $res_id = isset($_POST['reservation_id']) ? intval($_POST['reservation_id']) : 0;
+    if (!$res_id) {
+        wp_send_json_error(['message' => 'Invalid reservation ID']);
+    }
+
+    global $wpdb;
+    $res_table   = $wpdb->prefix . 'barre_reservations';
+    $lessons_tbl = $wpdb->prefix . 'barre_lessons';
+
+    // Get reservation
+    $res = $wpdb->get_row($wpdb->prepare(
+        "SELECT * FROM $res_table WHERE id = %d AND user_id = %d AND status = 'confirmed'",
+        $res_id,
+        get_current_user_id()
+    ));
+
+    if (!$res) {
+        wp_send_json_error(['message' => 'Reservation not found or not yours']);
+    }
+
+    // Check time policy (example: >24h before)
+    $lesson = $wpdb->get_row($wpdb->prepare(
+        "SELECT CONCAT(date, ' ', start_time) AS start_dt FROM $lessons_tbl WHERE id = %d",
+        $res->lesson_id
+    ));
+
+    $start_time = strtotime($lesson->start_dt);
+    if ($start_time < (time() + 24 * 3600)) {
+        wp_send_json_error(['message' => 'Too late to cancel (less than 24 hours remaining)']);
+    }
+
+    // Cancel
+    $wpdb->update($res_table, [
+        'status'       => 'cancelled',
+        'cancelled_at' => current_time('mysql')
+    ], ['id' => $res_id]);
+
+    // Decrease used spots
+    $wpdb->query($wpdb->prepare(
+        "UPDATE $lessons_tbl SET used_spots = used_spots - %d WHERE id = %d",
+        $res->num_persons,
+        $res->lesson_id
+    ));
+
+    wp_send_json_success(['message' => 'Reservation cancelled successfully']);
+}
+
+/**
+————————————————————————————————————————————————————
+// PAYMENT SIMULATION
+————————————————————————————————————————————————————
+*/
+add_action('wp_ajax_barre_simulate_payment', 'barre_simulate_payment_handler');
+
+function barre_simulate_payment_handler() {
+    check_ajax_referer('barre_nonce', '_ajax_nonce');
+
+    if (!is_user_logged_in()) {
+        wp_send_json_error(['message' => 'User not logged in']);
+    }
+
+    $user_id = get_current_user_id();
+    $basket = get_user_meta($user_id, 'barre_temp_basket', true);
+
+    if (!is_array($basket) || empty($basket)) {
+        wp_send_json_error(['message' => 'Basket empty']);
+    }
+
+    global $wpdb;
+    $lessons_tbl = $wpdb->prefix . 'barre_lessons';
+    $res_tbl     = $wpdb->prefix . 'barre_reservations';
+
+    $user_id = get_current_user_id();
+    $fake_payment_id = 'sim_' . uniqid(); // fake ID for testing
+
+    $wpdb->query('START TRANSACTION');
+
+    try {
+        foreach ($basket as $item) {
+            // Re-check capacity
+            $lesson = $wpdb->get_row($wpdb->prepare(
+                "SELECT capacity, used_spots FROM $lessons_tbl WHERE id = %d",
+                $item['lessonId']
+            ));
+
+            if (!$lesson || ($lesson->capacity - $lesson->used_spots) < $item['persons']) {
+                throw new Exception("Capacity exceeded for lesson {$item['lessonId']}");
+            }
+
+            // Insert reservation
+            $wpdb->insert($res_tbl, [
+                'user_id'     => $user_id,
+                'lesson_id'   => $item['lessonId'],
+                'num_persons' => $item['persons'],
+                'status'      => 'confirmed',
+                'payment_id'  => $fake_payment_id,
+                'created_at'  => current_time('mysql')
+            ]);
+
+            // Update spots
+            $wpdb->query($wpdb->prepare(
+                "UPDATE $lessons_tbl SET used_spots = used_spots + %d WHERE id = %d",
+                $item['persons'],
+                $item['lessonId']
+            ));
+        }
+
+        $wpdb->query('COMMIT');
+
+        // After successful processing, clean up
+        // Clear basket
+        delete_user_meta($user_id, 'barre_temp_basket');
+        unset($_SESSION['barre_basket']);
+
+        // Simulate email (or call real function)
+        barre_send_confirmation_email($user_id, $basket, (object)['payment_intent' => $fake_payment_id]);
+
+        wp_send_json_success();
+        // wp_send_json_success([
+        //     'message'          => 'Reservation completed',
+        //     'clear_client_basket' => true   // ← new flag
+        // ]);
+
+    } catch (Exception $e) {
+        $wpdb->query('ROLLBACK');
+        wp_send_json_error(['message' => $e->getMessage()]);
+    }
+}
 
 /**
 ————————————————————————————————————————————————————
@@ -1464,6 +1711,158 @@ function barre_check_basket_before_checkout() {
     wp_send_json_success();
 }
 */
+
+
+/**
+————————————————————————————————————————————————————
+// RESCHEDULE
+————————————————————————————————————————————————————
+*/
+
+add_action('wp_ajax_barre_load_available_slots_reschedule', 'barre_load_available_slots_reschedule');
+
+function barre_load_available_slots_reschedule() {
+    check_ajax_referer('barre_nonce', '_ajax_nonce');
+
+    if (!is_user_logged_in()) {
+        wp_send_json_error(['message' => 'Not logged in']);
+    }
+
+    $from = sanitize_text_field($_POST['from_date'] ?? '');
+    $to   = sanitize_text_field($_POST['to_date'] ?? '');
+
+    if (!$from || !$to) {
+        wp_send_json_error(['message' => 'Missing dates']);
+    }
+
+    global $wpdb;
+    $tbl = $wpdb->prefix . 'barre_lessons';
+
+    $slots = $wpdb->get_results($wpdb->prepare(
+        "SELECT id, name, date, start_time, duration, instructor_id, capacity, used_spots
+         FROM $tbl
+         WHERE date BETWEEN %s AND %s
+           AND date > CURDATE()
+         ORDER BY date, start_time",
+        $from,
+        $to
+    ), ARRAY_A);
+
+    $by_date = [];
+    foreach ($slots as $s) {
+        $avail = $s['capacity'] - $s['used_spots'];
+        if ($avail < 1) continue; // skip full
+
+        $instructor = $s['instructor_id'] ? get_the_title($s['instructor_id']) : '—';
+
+        $by_date[$s['date']][] = [
+            'id'          => $s['id'],
+            'name'        => $s['name'],
+            'start_time'  => substr($s['start_time'], 0, 5),
+            'instructor'  => $instructor,
+            'capacity'    => $s['capacity'],
+            'available'   => $avail
+        ];
+    }
+
+    wp_send_json_success([
+        'slots'      => $by_date,
+        'week_range' => date_i18n('j. M', strtotime($from)) . ' – ' . date_i18n('j. M Y', strtotime($to))
+    ]);
+}
+
+add_action('wp_ajax_barre_reschedule_reservation', 'barre_reschedule_reservation');
+
+function barre_reschedule_reservation() {
+    check_ajax_referer('barre_nonce', '_ajax_nonce');
+    // error_log('Reschedule called – nonce check skipped for debug');
+
+    $res_id     = intval($_POST['reservation_id'] ?? 0);
+    $new_lesson = intval($_POST['new_lesson_id'] ?? 0);
+
+    if (!$res_id || !$new_lesson) {
+        wp_send_json_error(['message' => 'Missing parameters']);
+    }
+
+    global $wpdb;
+    $res_tbl = $wpdb->prefix . 'barre_reservations';
+    $les_tbl = $wpdb->prefix . 'barre_lessons';
+
+    $res = $wpdb->get_row($wpdb->prepare(
+        "SELECT * FROM $res_tbl WHERE id = %d AND user_id = %d AND status = 'confirmed'",
+        $res_id, get_current_user_id()
+    ));
+
+    if (!$res) {
+        wp_send_json_error(['message' => 'Reservation not found']);
+    }
+
+    // Check time window (example: >24h before original)
+    $old_lesson = $wpdb->get_row($wpdb->prepare(
+        "SELECT CONCAT(date,' ',start_time) AS dt FROM $les_tbl WHERE id = %d",
+        $res->lesson_id
+    ));
+
+    if (strtotime($old_lesson->dt) < time() + 24*3600) {
+        wp_send_json_error(['message' => 'Too late to reschedule']);
+    }
+
+    // Check new slot availability
+    $new = $wpdb->get_row($wpdb->prepare(
+        "SELECT capacity, used_spots FROM $les_tbl WHERE id = %d AND date > CURDATE()",
+        $new_lesson
+    ));
+
+    if (!$new || $new->capacity - $new->used_spots < $res->num_persons) {
+        wp_send_json_error(['message' => 'Not enough spots in selected slot']);
+    }
+    
+
+
+    // Perform reschedule
+    $wpdb->query('START TRANSACTION');
+
+    try {
+        // Decrease old
+        $wpdb->query($wpdb->prepare(
+            "UPDATE $les_tbl SET used_spots = used_spots - %d WHERE id = %d",
+            $res->num_persons, $res->lesson_id
+        ));
+
+        // Increase new
+        $wpdb->query($wpdb->prepare(
+            "UPDATE $les_tbl SET used_spots = used_spots + %d WHERE id = %d",
+            $res->num_persons, $new_lesson
+        ));
+    /*
+    wp_send_json_success(['message' => 'Test so far so good']);
+    */
+
+        // Update reservation
+        $wpdb->update($res_tbl, [
+            'lesson_id' => $new_lesson,
+            'rescheduled_at' => current_time('mysql')
+        ], ['id' => $res_id]);
+
+
+        $wpdb->query('COMMIT');
+        wp_send_json_success(['message' => 'Successfully rescheduled!']);
+
+    } catch (Exception $e) {
+        $wpdb->query('ROLLBACK');
+        wp_send_json_error(['message' => 'Failed to reschedule']);
+    }
+}
+
+/**
+————————————————————————————————————————————————————
+// END RESCHEDULE
+————————————————————————————————————————————————————
+*/
+
+
+
+
 /**
 ————————————————————————————————————————————————————
 // BACK-END > PROCESS BASKET & CREATE STRIPE SESSION
@@ -1493,6 +1892,7 @@ function barre_process_basket_handler() {
     $line_items = [];
     $total_amount = 0;
     $pending_reservations = [];
+
 
     foreach ($basket as $item) {
         // Re-check availability (critical!)
@@ -1560,6 +1960,130 @@ function barre_process_basket_handler() {
 /**
  * Stripe Webhook – handle successful payment
  */
+
+//*/
+function barre_stripe_webhook_handler() {
+    // Only allow POST requests
+    if ($_SERVER['REQUEST_METHOD'] !== 'POST') {
+        http_response_code(405);
+        exit('Method Not Allowed');
+    }
+
+    // Read raw POST body (important - don't use $_POST!)
+    $payload = @file_get_contents('php://input');
+    $sig_header = $_SERVER['HTTP_STRIPE_SIGNATURE'] ?? '';
+
+    // Your webhook secret from Stripe dashboard (different for test/live)
+    $endpoint_secret = defined('STRIPE_WEBHOOK_SECRET') 
+        ? STRIPE_WEBHOOK_SECRET 
+        : 'whsec_placeholder'; // ← CHANGE THIS!
+
+    try {
+        $event = \Stripe\Webhook::constructEvent(
+            $payload,
+            $sig_header,
+            $endpoint_secret
+        );
+    } catch(\UnexpectedValueException $e) {
+        // Invalid payload
+        http_response_code(400);
+        exit("Invalid payload: " . $e->getMessage());
+    } catch(\Stripe\Exception\SignatureVerificationException $e) {
+        // Invalid signature
+        http_response_code(400);
+        exit("Webhook signature verification failed: " . $e->getMessage());
+    }
+
+    // Handle the event
+    switch ($event->type) {
+        case 'checkout.session.completed':
+            $session = $event->data->object;
+            
+            // Safety checks
+            if ($session->payment_status !== 'paid') {
+                break;
+            }
+
+            // Get pending reservations stored during checkout creation
+            $pending_key = 'pending_res_' . $session->id;
+            $reservations = get_transient($pending_key);
+
+            if (!$reservations || !is_array($reservations)) {
+                error_log("No pending reservations found for session: " . $session->id);
+                break;
+            }
+
+            global $wpdb;
+            $res_table = $wpdb->prefix . 'barre_reservations';
+            $lessons_table = $wpdb->prefix . 'barre_lessons';
+
+            $wpdb->query('START TRANSACTION');
+
+            try {
+                foreach ($reservations as $res) {
+                    // Double-check availability (paranoid mode)
+                    $current = $wpdb->get_var($wpdb->prepare(
+                        "SELECT used_spots FROM $lessons_table WHERE id = %d",
+                        $res['lesson_id']
+                    ));
+                    /* fetch capacity again if needed */
+                    if ($current === null || ($current + $res['num_persons']) > $res['capacity']) {
+                        throw new Exception("Capacity exceeded for lesson " . $res['lesson_id']);
+                    }
+
+                    // Insert reservation
+                    $wpdb->insert($res_table, [
+                        'user_id'     => $res['user_id'],
+                        'lesson_id'   => $res['lesson_id'],
+                        'num_persons' => $res['num_persons'],
+                        'status'      => 'confirmed',
+                        'payment_id'  => $session->payment_intent,
+                        'created_at'  => current_time('mysql')
+                    ]);
+
+                    // Update used spots
+                    $wpdb->query($wpdb->prepare(
+                        "UPDATE $lessons_table SET used_spots = used_spots + %d WHERE id = %d",
+                        $res['num_persons'],
+                        $res['lesson_id']
+                    ));
+                }
+
+                $wpdb->query('COMMIT');
+
+                // Clean up
+                delete_transient($pending_key);
+
+                // Send confirmation email(s)
+                barre_send_reservation_confirmation($session->customer_details->email, $reservations, $session);
+
+            } catch (Exception $e) {
+                $wpdb->query('ROLLBACK');
+                error_log("Reservation commit failed: " . $e->getMessage());
+                http_response_code(500);
+                exit();
+            }
+
+            break;
+
+        case 'checkout.session.expired':
+            // Optional: clean up pending reservations if you want
+            $session = $event->data->object;
+            delete_transient('pending_res_' . $session->id);
+            break;
+
+        // Add other events you care about (payment_intent.payment_failed, etc.)
+        default:
+            // Unexpected event type
+            error_log("Unhandled Stripe event type: " . $event->type);
+    }
+
+    // Everything OK
+    http_response_code(200);
+    exit();
+}
+
+/*/
 add_action('template_redirect', 'barre_handle_webhook');
 
 function barre_handle_webhook() {
@@ -1576,8 +2100,8 @@ function barre_handle_webhook() {
     $payload    = @file_get_contents('php://input');
     $sig_header = $_SERVER['HTTP_STRIPE_SIGNATURE'] ?? '';
 
-    $endpoint_secret = defined('BARRE_STRIPE_WEBHOOK_SECRET') 
-        ? BARRE_STRIPE_WEBHOOK_SECRET 
+    $endpoint_secret = defined('STRIPE_WEBHOOK_SECRET') 
+        ? STRIPE_WEBHOOK_SECRET 
         : 'whsec_placehold'; // ← CHANGE THIS!
 
     try {
@@ -1674,7 +2198,7 @@ function barre_handle_webhook() {
     http_response_code(200);
     exit;
 }
-
+//*/
 
 /**
  * Register custom rewrite rule for clean webhook URL
