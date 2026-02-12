@@ -429,6 +429,8 @@ function barre_create_custom_tables() {
         status VARCHAR(20) NOT NULL DEFAULT 'pending',
         payment_id VARCHAR(255) DEFAULT NULL,
         created_at DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP,
+        cancelled_at datetime DEFAULT NULL,
+        rescheduled_at datetime DEFAULT NULL,
         PRIMARY KEY (id),
         KEY user_id (user_id),
         KEY lesson_id (lesson_id),

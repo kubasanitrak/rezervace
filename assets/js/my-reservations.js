@@ -310,7 +310,7 @@ document.getElementById('confirmReschedule')?.addEventListener('click', async ()
     const btn = document.getElementById('confirmReschedule');
     btn.disabled = true;
     btn.textContent = 'Rescheduling...';
-    
+
 
     try {
         const response = await fetch(barreAjax.ajaxurl, {

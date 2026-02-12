@@ -165,6 +165,19 @@
     </div>
 </div>
 
+<!-- Success modal (added to basket) -->
+<div id="successModal" class="modal" style="display:none;">
+    <div class="modal-content success-modal">
+        <span class="btn btn-icn btn-icn--close modal-close" id="closeSuccess">×</span>
+        <div class="modal-icon">✓</div>
+        <h2>Successfully Rescheduled!</h2>
+        <p id="successMessage">Your reservation has been rescheduled.</p>
+        <div class="modal-actions">
+            <button id="closeCancelResultBtn" class="btn-primary">OK</button>
+        </div>
+    </div>
+</div>
+
 <!-- Reschedule modal with calendar picker -->
 <div id="rescheduleModal" class="modal" style="display:none; ">
     <div class="modal-content" style="max-width:900px; width:95%;">
