@@ -299,7 +299,7 @@ function renderRescheduleCalendar(slotsByDate, startDate) {
 
     container.appendChild(grid);
 }
-
+/*
 // Confirm reschedule → AJAX
 document.getElementById('confirmReschedule')?.addEventListener('click', async () => {
     if (!currentResId || !selectedNewSlotId) return;
@@ -341,7 +341,105 @@ document.getElementById('confirmReschedule')?.addEventListener('click', async ()
 });
 
 
+*/
+// Confirm reschedule → AJAX + nice modal result
+document.getElementById('confirmReschedule')?.addEventListener('click', async () => {
+    if (!currentResId || !selectedNewSlotId) return;
 
+    const btn = document.getElementById('confirmReschedule');
+    btn.disabled = true;
+    btn.textContent = 'Rescheduling...';
+
+    try {
+        const response = await fetch(barreAjax.ajaxurl, {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
+            body: new URLSearchParams({
+                action: 'barre_reschedule_reservation',
+                reservation_id: currentResId,
+                new_lesson_id: selectedNewSlotId,
+                _ajax_nonce: barreAjax.nonce
+            })
+        });
+
+        const result = await response.json();
+
+        // Close the calendar modal first
+        closeRescheduleModal();
+
+        // Show result modal instead of alert
+        if (result.success) {
+            showRescheduleResultModal(
+                'success',
+                result.data?.message || 'Successfully rescheduled!'
+            );
+            // Auto-refresh page after a short delay
+            setTimeout(() => location.reload(), 1800);
+        } else {
+            showRescheduleResultModal(
+                'error',
+                result.data?.message || 'Failed to reschedule.'
+            );
+        }
+
+    } catch (err) {
+        closeRescheduleModal();
+        showRescheduleResultModal(
+            'error',
+            'Connection error: ' + (err.message || 'Unknown issue')
+        );
+    } finally {
+        btn.disabled = false;
+        btn.textContent = 'Confirm New Slot';
+    }
+});
+
+// Reusable result modal function for reschedule
+function showRescheduleResultModal(type, message) {
+    const modal = document.getElementById('rescheduleResultModal');
+    const icon  = document.getElementById('resIcon');
+    const title = document.getElementById('resResultTitle');
+    const msgEl = document.getElementById('resResultMessage');
+
+    if (type === 'success') {
+        icon.textContent = '✓';
+        icon.className = 'modal-icon success';
+        title.textContent = 'Success';
+        title.className = 'success';
+    } else {
+        icon.textContent = '⚠';
+        icon.className = 'modal-icon error';
+        title.textContent = 'Error';
+        title.className = 'error';
+    }
+
+    msgEl.textContent = message;
+
+    modal.style.display = 'flex';
+    setTimeout(() => modal.classList.add('show'), 10);
+}
+
+// Close result modal
+document.getElementById('closeResResult')?.addEventListener('click', closeResResultModal);
+document.getElementById('closeResResultBtn')?.addEventListener('click', closeResResultModal);
+
+function closeResResultModal() {
+    const modal = document.getElementById('rescheduleResultModal');
+    modal.classList.remove('show');
+    setTimeout(() => modal.style.display = 'none', 300);
+}
+
+// Add Esc key support (if not already global)
+document.addEventListener('keydown', e => {
+    if (e.key === 'Escape') {
+        if (document.getElementById('rescheduleModal').style.display === 'flex') {
+            closeRescheduleModal();
+        }
+        if (document.getElementById('rescheduleResultModal').style.display === 'flex') {
+            closeResResultModal();
+        }
+    }
+});
 
     // document.querySelectorAll('.btn-reschedule').forEach(btn => {
     //     btn.addEventListener('click', function() {
