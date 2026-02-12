@@ -170,3 +170,19 @@
 #resResultTitle.error {
     color: #721c24;
 }
+
+/* DETAILS */
+#detailsContent {
+    line-height: 1.6;
+    margin: 1rem 0;
+}
+
+#detailsContent p {
+    margin: 0.8rem 0;
+}
+
+#detailsContent strong {
+    display: inline-block;
+    width: 140px;
+    color: #333;
+}

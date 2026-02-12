@@ -1858,9 +1858,60 @@ function barre_reschedule_reservation() {
 
 /**
 ————————————————————————————————————————————————————
-// END RESCHEDULE
+// VIEW RESERVATION DETAILS
 ————————————————————————————————————————————————————
 */
+
+add_action('wp_ajax_barre_get_reservation_details', 'barre_get_reservation_details');
+
+function barre_get_reservation_details() {
+    check_ajax_referer('barre_nonce', '_ajax_nonce');
+
+    if (!is_user_logged_in()) {
+        wp_send_json_error(['message' => 'Not logged in']);
+    }
+
+    $res_id = intval($_POST['reservation_id'] ?? 0);
+    if (!$res_id) {
+        wp_send_json_error(['message' => 'Invalid reservation ID']);
+    }
+
+    global $wpdb;
+    $res_tbl = $wpdb->prefix . 'barre_reservations';
+    $les_tbl = $wpdb->prefix . 'barre_lessons';
+
+    $res = $wpdb->get_row($wpdb->prepare(
+        "SELECT r.*, l.name, l.date, l.start_time, l.duration, l.price, l.instructor_id
+         FROM $res_tbl r
+         INNER JOIN $les_tbl l ON r.lesson_id = l.id
+         WHERE r.id = %d AND r.user_id = %d",
+        $res_id,
+        get_current_user_id()
+    ), ARRAY_A);
+
+    if (!$res) {
+        wp_send_json_error(['message' => 'Reservation not found']);
+    }
+
+    // Format everything here – so JS gets ready-to-use values
+    $instructor_name = $res['instructor_id'] ? get_the_title($res['instructor_id']) : '—';
+
+    $response_data = [
+        'id'                     => $res_id,
+        'name'                   => esc_html($res['name']),
+        'date_formatted'         => date_i18n('l, d.m.Y H:i', strtotime($res['date'] . ' ' . $res['start_time'])),
+        'duration'               => $res['duration'],
+        'instructor'             => esc_html($instructor_name),
+        'num_persons'            => $res['num_persons'],
+        'price_formatted'        => number_format($res['price'], 0),
+        'total_formatted'        => number_format($res['price'] * $res['num_persons'], 0),
+        'created_at_formatted'   => date_i18n('d.m.Y H:i', strtotime($res['created_at'])),
+        'cancelled_at_formatted' => $res['cancelled_at'] ? date_i18n('d.m.Y H:i', strtotime($res['cancelled_at'])) : '',
+        'rescheduled_at_formatted'=> $res['rescheduled_at'] ? date_i18n('d.m.Y H:i', strtotime($res['rescheduled_at'])) : ''
+    ];
+
+    wp_send_json_success($response_data);
+}
 
 
 

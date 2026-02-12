@@ -203,7 +203,19 @@
     </div>
 </div>
 
-
+<!-- View Reservation Details Modal -->
+<div id="viewDetailsModal" class="modal" style="display:none;">
+    <div class="modal-content" style="max-width:600px;">
+        <span class="modal-close" id="closeViewDetails">×</span>
+        <h2>Reservation Details</h2>
+        <div id="detailsContent">
+            <div class="loading">Loading details...</div>
+        </div>
+        <div class="modal-actions">
+            <button id="closeViewDetailsBtn" class="btn-primary">Close</button>
+        </div>
+    </div>
+</div>
         
     <?php endwhile; endif; ?>
 <?php get_footer(); ?>
