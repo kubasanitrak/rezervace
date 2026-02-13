@@ -1,6 +1,6 @@
 document.addEventListener('DOMContentLoaded', () => {
-    // console.log("loaded schedule.js");
-    // console.log( barreAjax.example_variable );
+    console.log("loaded schedule.js");
+    console.log( barreAjax.example_variable );
 
     // =============================================
     //   BARRE Schedule - Week View (Vanilla JS)
@@ -234,23 +234,17 @@ document.addEventListener('DOMContentLoaded', () => {
 
     let basket = JSON.parse(sessionStorage.getItem(BASKET_KEY)) || [];
 
-    // ────────────────────────────────────────────────
-    // Global state for add-to-basket modal
-    // ────────────────────────────────────────────────
-    let currentLessonToAdd = null;
-    let currentPersons = 1;
-
     function saveBasket() {
         sessionStorage.setItem(BASKET_KEY, JSON.stringify(basket));
         updateBasketUI();
     }
 
     function updateBasketUI() {
+console.log("updateBasketUI fired");
         const countEl = document.getElementById('basketCount');
         const itemsContainer = document.getElementById('basketItems');
         const totalEl = document.getElementById('basketTotal');
         const checkoutBtn = document.getElementById('goToCheckout');
-
 
         if (!countEl) return;
 
@@ -321,8 +315,7 @@ document.addEventListener('DOMContentLoaded', () => {
     document.addEventListener('click', function(e) {
         if (e.target.id === 'clearBasket') {
             if (basket.length === 0) {
-                // showErrorModal('Your basket is already empty.');
-                barreShared.showResultModal(null, `Your basket is already empty.`, 'errorModal');
+                showErrorModal('Your basket is already empty.');
             } else {
                 showClearConfirmModal();
             }
@@ -338,7 +331,9 @@ document.addEventListener('DOMContentLoaded', () => {
 
 
     // Global variables for modal
-    // const modal = document.getElementById('addToBasketModal');
+    const modal = document.getElementById('addToBasketModal');
+    let currentLessonToAdd = null;
+    let currentPersons     = 1;
     
     // Open modal when lesson is clicked
     function openAddToBasketModal(lesson) {
@@ -355,11 +350,14 @@ document.addEventListener('DOMContentLoaded', () => {
         const available = Number(lesson.available) || 0;
         document.getElementById('modalAvailable').textContent = available;
 
+        // Initialize display
         document.getElementById('personsDisplay').textContent = currentPersons;
         updateStepperState(available);
+
         updateModalTotalPrice();
 
-        barreShared.openModal('addToBasketModal');
+        // Show modal
+        document.getElementById('addToBasketModal').style.display = 'flex';
     }
 
     // Update total price display
@@ -377,11 +375,6 @@ document.addEventListener('DOMContentLoaded', () => {
         document.getElementById('decrement').disabled = currentPersons <= 1;
         document.getElementById('increment').disabled = currentPersons >= maxAllowed;
         document.getElementById('confirmAdd').disabled = currentPersons < 1 || currentPersons > available;
-    }
-    function closeAddModal() {
-        barreShared.closeModal('addToBasketModal');
-        currentLessonToAdd = null;
-        currentPersons = 1;
     }
 
     // Stepper logic
@@ -411,59 +404,75 @@ document.addEventListener('DOMContentLoaded', () => {
         currentLessonToAdd = null;
     }
 
-    // document.getElementById('closeModal')?.addEventListener('click', closeModal);
-    // document.getElementById('cancelAdd')?.addEventListener('click', closeModal);
+    document.getElementById('closeModal')?.addEventListener('click', closeModal);
+    document.getElementById('cancelAdd')?.addEventListener('click', closeModal);
 
     // Close when clicking outside content
     document.getElementById('addToBasketModal')?.addEventListener('click', function(e) {
         if (e.target === this) closeModal();
     });
     // Esc key to close && Esc key for all modals
-    // document.addEventListener('keydown', e => {
-    //     if (e.key === 'Escape' && modal?.style.display === 'flex') {
-    //         closeModal();
-    //     }
-    //     if (e.key === 'Escape') closeAllModals();
-    // });
+    document.addEventListener('keydown', e => {
+        if (e.key === 'Escape' && modal?.style.display === 'flex') {
+            closeModal();
+        }
+        if (e.key === 'Escape') closeAllModals();
+    });
 
-    // Confirm → add to basket
     document.getElementById('confirmAdd')?.addEventListener('click', () => {
         if (!currentLessonToAdd) return;
 
         const available = currentLessonToAdd.available || 0;
         if (currentPersons > available) {
-            barreShared.showResultModal('error', 'Not enough spots available!');
+            showErrorModal('Not enough spots available!');
             return;
         }
 
         const item = {
             lessonId: currentLessonToAdd.id,
-            name: currentLessonToAdd.name,
-            date: currentLessonToAdd.date,
-            time: currentLessonToAdd.start_time,
-            price: currentLessonToAdd.price,
-            persons: currentPersons
+            name:     currentLessonToAdd.name,
+            date:     currentLessonToAdd.date,
+            time:     currentLessonToAdd.start_time,
+            price:    currentLessonToAdd.price,
+            persons:  currentPersons
         };
 
+        // Prevent duplicate
         if (basket.some(i => i.lessonId === item.lessonId)) {
-            barreShared.showResultModal('error', 'This lesson is already in your basket.');
-            closeAddModal();
+            showErrorModal('This lesson is already in your basket.');
+            closeModal();
             return;
         }
 
         basket.push(item);
-        sessionStorage.setItem('barre_reservation_basket', JSON.stringify(basket));
-        updateBasketUI(); // your existing function
+        saveBasket();
+        updateBasketUI();
 
-        barreShared.showResultModal('success', `Added: ${item.name} × ${currentPersons} person(s)`, 'successModal');
-        closeAddModal();
+        // Show success feedback (you can replace alert with nicer modal later)
+        showSuccessModal(`${item.name} × ${currentPersons} person${currentPersons > 1 ? 's' : ''} added to basket!`);
+
+        closeModal();
     });
-    // Close add modal buttons
-    document.getElementById('closeModal')?.addEventListener('click', closeAddModal);
-    document.getElementById('cancelAdd')?.addEventListener('click', closeAddModal);
 
     // Update price when selection changes
     document.getElementById('modalPersons')?.addEventListener('change', updateModalTotalPrice);
+
+
+
+    // === REUSABLE MODAL FUNCTIONS ===
+    function showSuccessModal(message) {
+        document.getElementById('successMessage').textContent = message;
+        const modal = document.getElementById('successModal');
+        modal.style.display = 'flex';
+        setTimeout(() => modal.classList.add('show'), 10);
+    }
+
+    function showErrorModal(message) {
+        document.getElementById('errorMessage').textContent = message;
+        const modal = document.getElementById('errorModal');
+        modal.style.display = 'flex';
+        setTimeout(() => modal.classList.add('show'), 10);
+    }
 
     function showClearConfirmModal() {
         const modal = document.getElementById('clearConfirmModal');
@@ -487,11 +496,12 @@ document.addEventListener('DOMContentLoaded', () => {
     document.getElementById('viewBasketBtn')?.addEventListener('click', () => {
         closeAllModals();
         const modal = document.getElementById('basketContent');
+        // modal.style.display = 'block';
+        // setTimeout(() => modal.classList.add('show'), 400);
         setTimeout(function () {
             modal.style.display = 'block';
             modal.classList.add('show');
         }, 500);
-        // barreShared.showResultModal('basketContent');
     });
 
     document.getElementById('confirmClear')?.addEventListener('click', () => {
@@ -499,19 +509,49 @@ document.addEventListener('DOMContentLoaded', () => {
         saveBasket();
         closeAllModals();
         updateBasketUI(); // refresh floating basket
-        setTimeout(function () {
-            barreShared.showResultModal('success', `Your basket has been cleared.`, 'successModal');
-        }, 300);
+        setTimeout(showSuccessModal, 300, 'Your basket has been cleared.');
     });
 
-    document.getElementById('goToCheckout')?.addEventListener('click', async () => {
+/*
+    // Checkout button – later will redirect to checkout page
+    document.getElementById('goToCheckout')?.addEventListener('click', function() {
         if (basket.length === 0) {
-            barreShared.showResultModal('error', 'Your basket is empty.');
+            showErrorModal('Your basket is empty.');
+            return;
+        }
+
+        // Option A: Simple redirect (recommended for now)
+        window.location.href = '/rezervace/checkout';  // ← your checkout page slug
+        // Option B: AJAX check + redirect (if you want server-side validation first)
+        fetch(barreAjax.ajaxurl, {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
+            body: new URLSearchParams({
+                action: 'barre_check_basket_before_checkout',
+                _ajax_nonce: barreAjax.nonce
+            })
+        })
+        .then(r => r.json())
+        .then(data => {
+            if (data.success) {
+                window.location.href = '/rezervace/checkout';
+            } else {
+                showErrorModal(data.data?.message || 'Cannot proceed to checkout.');
+            }
+        })
+        .catch(() => showErrorModal('Connection error.'));
+
+    });
+*/
+
+    document.getElementById('goToCheckout')?.addEventListener('click', async function() {
+        if (basket.length === 0) {
+            showErrorModal('Your basket is empty.');
             return;
         }
 
         try {
-            const r = await fetch(barreAjax.ajaxurl, {
+            const response = await fetch(barreAjax.ajaxurl, {
                 method: 'POST',
                 headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
                 body: new URLSearchParams({
@@ -521,15 +561,19 @@ document.addEventListener('DOMContentLoaded', () => {
                 })
             });
 
-            const data = await r.json();
+            const result = await response.json();
 
-            if (data.success) {
+            if (result.success) {
+                // Now safe to redirect — server has the basket
                 window.location.href = '/rezervace/checkout';
             } else {
-                barreShared.showResultModal('error', data.data?.message || 'Failed to prepare checkout.');
+                showErrorModal(result.data?.message || 'Failed to prepare checkout.');
             }
         } catch (err) {
-            barreShared.showResultModal('error', 'Connection error while preparing checkout.');
+            showErrorModal('Connection error while preparing checkout.');
         }
     });
+
+    
+
 });

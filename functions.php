@@ -1304,7 +1304,6 @@ add_action('wp_ajax_barre_admin_load_schedule', 'barre_admin_load_schedule_ajax'
 ————————————————————————————————————————————————————
 // FRONT-END > SCHEDULE & MY RESERVATION PAGES
 ————————————————————————————————————————————————————
-/**/
 
 function enqueue_barre_schedule_scripts() {
   
@@ -1340,13 +1339,15 @@ function enqueue_barre_schedule_scripts() {
     );
 }
 add_action('wp_enqueue_scripts', 'enqueue_barre_schedule_scripts');
+*/
 
 /**
  * AJAX Handler: Load barre lessons for selected week
  */
 function barre_load_schedule_ajax_handler() {
     // check_ajax_referer('barre_schedule_nonce', '_ajax_nonce');
-    check_ajax_referer('barre-ajax-nonce', '_ajax_nonce');
+    // check_ajax_referer('barre-ajax-nonce', '_ajax_nonce');
+    check_ajax_referer('barre_nonce', '_ajax_nonce');
 
     $from_date = isset($_POST['from_date']) ? sanitize_text_field($_POST['from_date']) : '';
     $to_date   = isset($_POST['to_date'])   ? sanitize_text_field($_POST['to_date'])   : '';
@@ -1464,7 +1465,8 @@ add_action('wp_enqueue_scripts', 'enqueue_barre_checkout_scripts');
 add_action('wp_ajax_barre_sync_basket_to_server', 'barre_sync_basket_to_server');
 
 function barre_sync_basket_to_server() {
-    check_ajax_referer('barre-ajax-nonce', '_ajax_nonce');
+    // check_ajax_referer('barre-ajax-nonce', '_ajax_nonce');
+    check_ajax_referer('barre_nonce', '_ajax_nonce');
 
     
     if (!is_user_logged_in()) {
@@ -1488,7 +1490,7 @@ function barre_sync_basket_to_server() {
     wp_send_json_success();
 }
 
-
+/*
 function barre_enqueue_checkout_scripts() {
     // Only on checkout page
     if (is_page_template('page-checkout-template.php') || is_page('checkout')) {  // adjust slug if needed
@@ -1520,13 +1522,93 @@ function barre_enqueue_checkout_scripts() {
     }
 }
 add_action('wp_enqueue_scripts', 'barre_enqueue_checkout_scripts');
+*/
 
+function barre_enqueue_frontend_scripts() {
+    // Always load shared core
+    wp_enqueue_script(
+        'barre-shared-js',
+        get_stylesheet_directory_uri() . '/assets/js/shared-frontend.js',
+        [],
+        '1.0.3',
+        true
+    );
 
+    // Page-specific
+    if (is_page_template('page-template-schedule.php') || is_page('schedule')) {
+        wp_enqueue_script('barre-schedule-js', get_stylesheet_directory_uri() . '/assets/js/schedule.js', ['jquery', 'barre-shared-js'], '1.0', true);
+        wp_localize_script('barre-schedule-js', 'barreAjax', [
+            'ajaxurl' => admin_url('admin-ajax.php'),
+            'nonce'   => wp_create_nonce('barre_nonce')
+        ]);
+        // CSS
+        wp_enqueue_style(
+            'barre-schedule-css',
+            get_stylesheet_directory_uri() . '/assets/css/schedule.css',
+            [],
+            '1.0.0'
+        );
+    }
+
+    if (is_page_template('page-checkout-template.php') || is_page('checkout')) {
+        wp_enqueue_script('barre-checkout-js', get_stylesheet_directory_uri() . '/assets/js/checkout.js', ['jquery', 'barre-shared-js'], '1.0', true);
+        wp_localize_script('barre-checkout-js', 'barreAjax', [
+            'ajaxurl' => admin_url('admin-ajax.php'),
+            'nonce'   => wp_create_nonce('barre_nonce')
+        ]);
+        // CSS
+        wp_enqueue_style(
+            'barre-checkout-css',
+            get_stylesheet_directory_uri() . '/assets/css/checkout.css',
+            [],
+            '1.0.0'
+        );
+    }
+
+    if (is_page_template('page-my-reservations.php') || is_page('my-reservations')) {
+        wp_enqueue_script('barre-reservations-js', get_stylesheet_directory_uri() . '/assets/js/my-reservations.js', ['jquery', 'barre-shared-js'], '1.0', true);
+        wp_localize_script('barre-reservations-js', 'barreAjax', [
+            'ajaxurl' => admin_url('admin-ajax.php'),
+            'nonce'   => wp_create_nonce('barre_nonce')
+        ]);
+        // CSS
+        wp_enqueue_style(
+            'barre-reservations-css',
+            get_stylesheet_directory_uri() . '/assets/css/my-reservations.css',
+            [],
+            '1.0.0'
+        );
+    }
+    // CSS
+    /*
+        wp_enqueue_style(
+            'barre-schedule-css',
+            get_stylesheet_directory_uri() . '/assets/css/schedule.css',
+            [],
+            '1.0.0'
+        );
+// CSS
+        wp_enqueue_style(
+            'barre-checkout-css',
+            get_stylesheet_directory_uri() . '/assets/css/checkout.css',
+            [],
+            '1.0.0'
+        );
+// CSS
+        wp_enqueue_style(
+            'barre-reservations-css',
+            get_stylesheet_directory_uri() . '/assets/css/my-reservations.css',
+            [],
+            '1.0.0'
+        );
+        */
+}
+add_action('wp_enqueue_scripts', 'barre_enqueue_frontend_scripts');
 /**
 ————————————————————————————————————————————————————
 // RESERVATION SCRIPTS AND STYLES
 ————————————————————————————————————————————————————
-*/
+
 function barre_enqueue_myreservations_scripts() {
     if (is_page_template('page-my-reservations.php') || is_page('my-reservations')) {  // adjust slug if needed
         // Enqueue the same JS file you use for schedule/basket
@@ -1552,6 +1634,8 @@ function barre_enqueue_myreservations_scripts() {
     }
 }
 add_action('wp_enqueue_scripts', 'barre_enqueue_myreservations_scripts');
+*/
+
 /**
 ————————————————————————————————————————————————————
 // BACKEND – RESERVATION CANCEL HANDLER
@@ -1836,9 +1920,6 @@ function barre_reschedule_reservation() {
             "UPDATE $les_tbl SET used_spots = used_spots + %d WHERE id = %d",
             $res->num_persons, $new_lesson
         ));
-    /*
-    wp_send_json_success(['message' => 'Test so far so good']);
-    */
 
         // Update reservation
         $wpdb->update($res_tbl, [
