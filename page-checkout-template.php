@@ -41,26 +41,22 @@
             <div class="total-section">
                 <h3>Total: <span id="checkout-total">0 Kč</span></h3>
             </div>
-
-            <!-- <button id="confirm-and-pay" class="btn-pay">Proceed to Payment →</button>
-            <button id="back-to-schedule">← Back to Schedule</button> -->
-            <!-- in template-barre-checkout.php or similar -->
-
             
 
             <div class="checkout-actions">
                 <button type="button" id="simulatePayment" class="btn-pay">
                     Simulate Payment (Test Mode)
                 </button>
-                <a href="/schedule" class="btn-secondary">Back to Schedule</a>
+                <a href="<?php echo home_url('/schedule'); ?>" class="btn-secondary">Back to Schedule</a>
             </div>
 
-            <!-- Fake payment modal -->
-            <div id="fakePaymentModal" class="modal" style="display:none;">
+
+            <div id="resultModal" class="modal" style="display:none;">
                 <div class="modal-content">
                     <span class="modal-close btn-icn--close" id="closeFakePayment">×</span>
-                    <h2>Simulate Payment</h2>
-                    <p>For testing: Click "Pay" to simulate successful payment.</p>
+                    <div class="modal-icon" id="resIcon">?</div>
+                    <h2 id="resResultTitle">Result</h2>
+                    <p id="resResultMessage">For testing: Click "Pay" to simulate successful payment.</p>
                     <div class="modal-actions">
                         <button id="cancelFakePayment" class="btn-secondary">Cancel</button>
                         <button id="confirmFakePayment" class="btn-primary">Pay (Simulate)</button>

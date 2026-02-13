@@ -406,25 +406,17 @@ document.addEventListener('DOMContentLoaded', () => {
     });
 
     // Close modal handlers
-    function closeModal() {
-        document.getElementById('addToBasketModal').style.display = 'none';
-        currentLessonToAdd = null;
-    }
-
-    // document.getElementById('closeModal')?.addEventListener('click', closeModal);
-    // document.getElementById('cancelAdd')?.addEventListener('click', closeModal);
+    // function closeModal() {
+    //     // document.getElementById('addToBasketModal').style.display = 'none';
+    //     // barreShared.closeModal('addToBasketModal');
+    //     // currentLessonToAdd = null;
+    //     closeAddModal();
+    // }
 
     // Close when clicking outside content
     document.getElementById('addToBasketModal')?.addEventListener('click', function(e) {
-        if (e.target === this) closeModal();
+        if (e.target === this) closeAddModal();
     });
-    // Esc key to close && Esc key for all modals
-    // document.addEventListener('keydown', e => {
-    //     if (e.key === 'Escape' && modal?.style.display === 'flex') {
-    //         closeModal();
-    //     }
-    //     if (e.key === 'Escape') closeAllModals();
-    // });
 
     // Confirm → add to basket
     document.getElementById('confirmAdd')?.addEventListener('click', () => {

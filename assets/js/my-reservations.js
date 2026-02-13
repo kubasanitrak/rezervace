@@ -302,64 +302,28 @@ document.addEventListener('DOMContentLoaded', () => {
 
             // Show result modal instead of alert
             if (result.success) {
-                showRescheduleResultModal(
-                    'success',
-                    result.data?.message || 'Successfully rescheduled!'
-                );
+                barreShared.showResultModal('success', `result.data?.message || 'Successfully rescheduled!'`, 'rescheduleResultModal');
                 // Auto-refresh page after a short delay
                 setTimeout(() => location.reload(), 1800);
             } else {
-                showRescheduleResultModal(
-                    'error',
-                    result.data?.message || 'Failed to reschedule.'
-                );
+                barreShared.showResultModal('error', `result.data?.message || 'Failed to reschedule.'`, 'rescheduleResultModal');
             }
 
         } catch (err) {
             closeRescheduleModal();
-            showRescheduleResultModal(
-                'error',
-                'Connection error: ' + (err.message || 'Unknown issue')
-            );
+            barreShared.showResultModal('error', `'Connection error: ' + (err.message || 'Unknown issue')`, 'rescheduleResultModal');
         } finally {
             btn.disabled = false;
             btn.textContent = 'Confirm New Slot';
         }
     });
 
-    // Reusable result modal function for reschedule
-    function showRescheduleResultModal(type, message) {
-        const modal = document.getElementById('rescheduleResultModal');
-        const icon  = document.getElementById('resIcon');
-        const title = document.getElementById('resResultTitle');
-        const msgEl = document.getElementById('resResultMessage');
-
-        if (type === 'success') {
-            icon.textContent = '✓';
-            icon.className = 'modal-icon success';
-            title.textContent = 'Success';
-            title.className = 'success';
-        } else {
-            icon.textContent = '⚠';
-            icon.className = 'modal-icon error';
-            title.textContent = 'Error';
-            title.className = 'error';
-        }
-
-        msgEl.textContent = message;
-
-        modal.style.display = 'flex';
-        setTimeout(() => modal.classList.add('show'), 10);
-    }
-
     // Close result modal
     document.getElementById('closeResResult')?.addEventListener('click', closeResResultModal);
     document.getElementById('closeResResultBtn')?.addEventListener('click', closeResResultModal);
 
     function closeResResultModal() {
-        const modal = document.getElementById('rescheduleResultModal');
-        modal.classList.remove('show');
-        setTimeout(() => modal.style.display = 'none', 300);
+        barreShared.closeModal('rescheduleResultModal');
     }
 
     
@@ -427,32 +391,7 @@ document.addEventListener('DOMContentLoaded', () => {
     document.getElementById('closeViewDetailsBtn')?.addEventListener('click', closeViewDetailsModal);
 
     function closeViewDetailsModal() {
-        const modal = document.getElementById('viewDetailsModal');
-        modal.classList.remove('show');
-        setTimeout(() => modal.style.display = 'none', 300);
+        barreShared.closeModal('viewDetailsModal');
     }
 
-    // Esc key support
-    document.addEventListener('keydown', e => {
-        if (e.key === 'Escape') {
-            if (document.getElementById('viewDetailsModal').style.display === 'flex') {
-                closeViewDetailsModal();
-            }
-            if (document.getElementById('cancelConfirmModal').style.display === 'flex') {
-                closeCancelConfirmModal();
-            }
-            if (document.getElementById('cancelResultModal').style.display === 'flex') {
-                closeCancelResultModal();
-            }
-            if (document.getElementById('rescheduleModal').style.display === 'flex') {
-                closeRescheduleModal();
-            }
-            if (document.getElementById('rescheduleModal').style.display === 'flex') {
-                closeRescheduleModal();
-            }
-            if (document.getElementById('rescheduleResultModal').style.display === 'flex') {
-                closeResResultModal();
-            }
-        }
-    });
 });
