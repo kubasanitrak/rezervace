@@ -1600,6 +1600,12 @@ function barre_enqueue_frontend_scripts() {
             [],
             '1.0.0'
         );
+        wp_enqueue_style(
+            'bulma-css',
+            get_stylesheet_directory_uri() . '/assets/css/bulma.css',
+            [],
+            '1.0.0'
+        );
     /*
         */
 }

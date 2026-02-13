@@ -213,8 +213,8 @@
     border-radius: 12px;
     padding: 1.8rem;
     box-shadow: 0 10px 30px rgba(0,0,0,0.25);
-    position: relative;
     animation: modalFadeIn 0.3s ease-out;
+    position: relative;
 }
 
 @keyframes modalFadeIn {
@@ -222,6 +222,11 @@
     to   { opacity: 1; transform: translateY(0); }
 }
 
+.modal-close {
+    position: absolute;
+    width: var(--bulma-delete-dimensions);
+    height: var(--bulma-delete-dimensions);
+}
 .modal-close,
 .btn-icn--close {
     cursor: pointer;
