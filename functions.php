@@ -1542,12 +1542,12 @@ function barre_enqueue_frontend_scripts() {
             'nonce'   => wp_create_nonce('barre_nonce')
         ]);
         // CSS
-        wp_enqueue_style(
-            'barre-schedule-css',
-            get_stylesheet_directory_uri() . '/assets/css/schedule.css',
-            [],
-            '1.0.0'
-        );
+        // wp_enqueue_style(
+        //     'barre-schedule-css',
+        //     get_stylesheet_directory_uri() . '/assets/css/schedule.css',
+        //     [],
+        //     '1.0.0'
+        // );
     }
 
     if (is_page_template('page-checkout-template.php') || is_page('checkout')) {
@@ -1557,12 +1557,12 @@ function barre_enqueue_frontend_scripts() {
             'nonce'   => wp_create_nonce('barre_nonce')
         ]);
         // CSS
-        wp_enqueue_style(
-            'barre-checkout-css',
-            get_stylesheet_directory_uri() . '/assets/css/checkout.css',
-            [],
-            '1.0.0'
-        );
+        // wp_enqueue_style(
+        //     'barre-checkout-css',
+        //     get_stylesheet_directory_uri() . '/assets/css/checkout.css',
+        //     [],
+        //     '1.0.0'
+        // );
     }
 
     if (is_page_template('page-my-reservations.php') || is_page('my-reservations')) {
@@ -1572,15 +1572,14 @@ function barre_enqueue_frontend_scripts() {
             'nonce'   => wp_create_nonce('barre_nonce')
         ]);
         // CSS
-        wp_enqueue_style(
-            'barre-reservations-css',
-            get_stylesheet_directory_uri() . '/assets/css/my-reservations.css',
-            [],
-            '1.0.0'
-        );
+        // wp_enqueue_style(
+        //     'barre-reservations-css',
+        //     get_stylesheet_directory_uri() . '/assets/css/my-reservations.css',
+        //     [],
+        //     '1.0.0'
+        // );
     }
     // CSS
-    /*
         wp_enqueue_style(
             'barre-schedule-css',
             get_stylesheet_directory_uri() . '/assets/css/schedule.css',
@@ -1601,6 +1600,7 @@ function barre_enqueue_frontend_scripts() {
             [],
             '1.0.0'
         );
+    /*
         */
 }
 add_action('wp_enqueue_scripts', 'barre_enqueue_frontend_scripts');
