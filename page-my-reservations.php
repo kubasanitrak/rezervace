@@ -143,7 +143,7 @@
 <div id="cancelConfirmModal" class="modal" style="display:none; ">
     <div class="modal-content">
         <!-- <span class="modal-close btn-icn--close delete" id="closeCancelConfirm">×</span> -->
-        <button class=" delete" id="closeCancelConfirm"></button>
+        <span class="button delete" id="closeCancelConfirm"></span>
         <h2>Cancel Reservation?</h2>
         <p id="cancelMessage">This will cancel your booking. Are you sure?</p>
         <div class="modal-actions">
@@ -157,7 +157,7 @@
 <div id="cancelResultModal" class="modal" style="display:none; ">
     <div class="modal-content">
         <!-- <span class="modal-close btn-icn--close" id="closeCancelResult">×</span> -->
-        <button class=" delete" id="closeCancelResult"></button>
+        <span class="button delete" id="closeCancelResult"></span>
         <div class="modal-icon" id="cancelIcon">?</div>
         <h2 id="cancelResultTitle">Result</h2>
         <p id="cancelResultMessage"></p>
@@ -171,7 +171,7 @@
 <div id="rescheduleResultModal" class="modal" style="display:none;">
     <div class="modal-content">
         <!-- <span class="modal-close" id="closeResResult">×</span> -->
-        <button class="delete " id="closeResResult"></button>
+        <span class="button delete" id="closeResResult"></span>
         <div class="modal-icon" id="resIcon">?</div>
         <h2 id="resResultTitle">Result</h2>
         <p id="resResultMessage"></p>
@@ -185,7 +185,7 @@
 <div id="rescheduleModal" class="modal" style="display:none; ">
     <div class="modal-content" style="max-width:900px; width:95%;">
         <!-- <span class="modal-close btn-icn--close" id="closeReschedule">×</span> -->
-        <button class="delete  " id="closeReschedule"></button>
+        <span class="button delete" id="closeReschedule"></span>
         <h2>Reschedule Your Booking</h2>
         <p id="rescheduleCurrentInfo"></p>
 
@@ -211,7 +211,7 @@
 <div id="viewDetailsModal" class="modal" style="display:none;">
     <div class="modal-content" style="max-width:600px;">
         <!-- <span class="modal-close" id="closeViewDetails">×</span> -->
-        <button class="delete " id="closeViewDetails"></button>
+        <span class="button delete" id="closeViewDetails"></span>
         <h2>Reservation Details</h2>
         <div id="detailsContent">
             <div class="loading">Loading details...</div>
