@@ -16,8 +16,8 @@ document.addEventListener('DOMContentLoaded', () => {
     });
 
     // Close cancel confirmation modal
-    document.getElementById('closeCancelConfirm')?.addEventListener('click', closeCancelConfirmModal);
-    document.getElementById('cancelCancel')?.addEventListener('click', closeCancelConfirmModal);
+    document.getElementById('closeCancelConfirm')?.addEventListener('click', () => barreShared.closeModal('cancelConfirmModal'));
+    document.getElementById('cancelCancel')?.addEventListener('click', () => barreShared.closeModal('cancelConfirmModal'));
 
     function closeCancelConfirmModal() {
         const modal = document.getElementById('cancelConfirmModal');
@@ -49,69 +49,32 @@ document.addEventListener('DOMContentLoaded', () => {
 
             const result = await response.json();
 
-            closeCancelConfirmModal();
+            barreShared.closeModal('cancelConfirmModal');
 
-            // Show result modal instead of alert
-            showCancelResultModal(
-                result.success ? 'success' : 'error',
-                result.success 
-                    ? (result.data?.message || 'Reservation cancelled successfully.')
-                    : (result.data?.message || 'Failed to cancel reservation.')
-            );
 
             if (result.success) {
+                 barreShared.showResultModal('success', result.data?.message || 'Reservation cancelled successfully', 'cancelResultModal');
                 // Optional: refresh page or remove row from DOM
                 setTimeout(() => location.reload(), 1500);
+            } else {
+                barreShared.showResultModal('error', result.data?.message || 'Failed to cancel reservation', 'cancelResultModal');
             }
 
         } catch (err) {
-            closeCancelConfirmModal();
-            showCancelResultModal('error', 'Connection error: ' + err.message);
+            barreShared.closeModal('cancelResultModal');
+            barreShared.showResultModal('error', 'Connection error: ' + (err.message || 'Unknown issue', 'cancelResultModal'));
         } finally {
             confirmBtn.disabled = false;
             confirmBtn.textContent = 'Yes, Cancel';
         }
     });
 
-    // Result modal helper
-    function showCancelResultModal(type, message) {
-        const modal = document.getElementById('cancelResultModal');
-        const icon = document.getElementById('cancelIcon');
-        const title = document.getElementById('cancelResultTitle');
-        const msgEl = document.getElementById('cancelResultMessage');
-
-        if (type === 'success') {
-            icon.textContent = '✓';
-            icon.style.color = '#28a745';
-            title.textContent = 'Success';
-            title.style.color = '#155724';
-        } else {
-            icon.textContent = '⚠';
-            icon.style.color = '#dc3545';
-            title.textContent = 'Error';
-            title.style.color = '#721c24';
-        }
-
-        msgEl.textContent = message;
-
-        modal.style.display = 'flex';
-        setTimeout(() => modal.classList.add('show'), 10);
-    }
-
     // Close result modal
     document.getElementById('closeCancelResult')?.addEventListener('click', closeCancelResultModal);
     document.getElementById('closeCancelResultBtn')?.addEventListener('click', closeCancelResultModal);
 
     function closeCancelResultModal() {
-        const modal = document.getElementById('cancelResultModal');
-        modal.classList.remove('show');
-        setTimeout(() => modal.style.display = 'none', 300);
-    }
-
-    function closeRescheduleModal() {
-        const modal = document.getElementById('rescheduleModal');
-        modal.classList.remove('show');
-        setTimeout(() => modal.style.display = 'none', 300);
+         barreShared.closeModal('cancelResultModal');
     }
 
     
@@ -148,6 +111,7 @@ document.addEventListener('DOMContentLoaded', () => {
             const modal = document.getElementById('rescheduleModal');
             modal.style.display = 'flex';
             setTimeout(() => modal.classList.add('show'), 10);
+            // barreShared.showResultModal('success', null, 'rescheduleModal');
 
             // Load initial week
             loadRescheduleCalendar();
@@ -159,13 +123,9 @@ document.addEventListener('DOMContentLoaded', () => {
     document.getElementById('cancelReschedule')?.addEventListener('click', closeRescheduleModal);
 
     function closeRescheduleModal() {
-        const modal = document.getElementById('rescheduleModal');
-        modal.classList.remove('show');
-        setTimeout(() => {
-            modal.style.display = 'none';
-            currentResId = null;
-            selectedNewSlotId = null;
-        }, 300);
+        barreShared.closeModal('rescheduleModal');
+        currentResId = null;
+        selectedNewSlotId = null;
     }
 
     // Week navigation
@@ -302,16 +262,16 @@ document.addEventListener('DOMContentLoaded', () => {
 
             // Show result modal instead of alert
             if (result.success) {
-                barreShared.showResultModal('success', `result.data?.message || 'Successfully rescheduled!'`, 'rescheduleResultModal');
+                barreShared.showResultModal('success', result.data?.message || 'Successfully rescheduled!', 'rescheduleResultModal');
                 // Auto-refresh page after a short delay
                 setTimeout(() => location.reload(), 1800);
             } else {
-                barreShared.showResultModal('error', `result.data?.message || 'Failed to reschedule.'`, 'rescheduleResultModal');
+                barreShared.showResultModal('error', result.data?.message || 'Failed to reschedule.', 'rescheduleResultModal');
             }
 
         } catch (err) {
             closeRescheduleModal();
-            barreShared.showResultModal('error', `'Connection error: ' + (err.message || 'Unknown issue')`, 'rescheduleResultModal');
+            barreShared.showResultModal('error', 'Connection error: ' + (err.message || 'Unknown issue'), 'rescheduleResultModal');
         } finally {
             btn.disabled = false;
             btn.textContent = 'Confirm New Slot';

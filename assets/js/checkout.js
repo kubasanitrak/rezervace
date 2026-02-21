@@ -53,6 +53,7 @@ document.addEventListener('DOMContentLoaded', () => {
     modal?.addEventListener('click', e => { if (e.target === modal) closeFakeModal(); });
 
     // Simulate payment via AJAX
+    /*/
     confirmBtn?.addEventListener('click', () => {
         confirmBtn.disabled = true;
         confirmBtn.textContent = 'Processing...';
@@ -84,5 +85,42 @@ document.addEventListener('DOMContentLoaded', () => {
             confirmBtn.textContent = 'Pay (Simulate)';
         });
     });
+    /*/
+    confirmBtn?.addEventListener('click', async () => {
+        confirmBtn.disabled = true;
+        confirmBtn.textContent = 'Processing...';
+
+        try {
+            const response = await fetch(barreAjax.ajaxurl, {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
+                body: new URLSearchParams({
+                    action: 'barre_simulate_payment',
+                    _ajax_nonce: barreAjax.nonce
+                })
+            });
+
+            const data = await response.json();
+
+            barreShared.closeModal('fakePaymentModal');
+
+            if (data.success) {
+                barreShared.showResultModal('success', 'Payment simulated successfully!');
+                // Auto-redirect after short delay (user sees success message)
+                setTimeout(() => {
+                    window.location.href = '/rezervace/reservation-success/?simulated=1';
+                }, 1500);
+            } else {
+                barreShared.showResultModal('error', data.data?.message || 'Simulation failed.');
+            }
+        } catch (err) {
+            barreShared.closeModal('fakePaymentModal');
+            barreShared.showResultModal('error', 'Connection error: ' + (err.message || 'Unknown issue'));
+        } finally {
+            confirmBtn.disabled = false;
+            confirmBtn.textContent = 'Pay (Simulate)';
+        }
+    });
+    //*/
 
 });
